@@ -1,0 +1,40 @@
+name: TestDriver.ai 
+
+permissions:
+  actions: read
+  contents: write
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: "TestDriver"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: testdriverai/action@main
+        with:
+          key: ${{ secrets.TESTDRIVER_API_KEY }}
+          prompt: |
+            1. /generate desktop 10
+          prerun: |
+            Get-NetIPAddress -AddressFamily IPv6
+            # URL for the Pieces Desktop installer (Windows)
+            $installerUrl = "https://builds.pieces.app/stages/production/pieces_suite_windows/appinstaller/download"
+            # Location to save the installer
+            $installerPath = "$env:USERPROFILE\Downloads\PiecesInstaller.exe"
+            # Download the Pieces Desktop installer
+            Write-Host "Downloading Pieces Desktop installer..."
+            Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath
+            # Check if the download was successful
+            if (Test-Path $installerPath) {
+                Write-Host "Download successful. Running the installer..."
+                Start-Process -FilePath $installerPath -ArgumentList '/silent' -Wait
+                Start-Sleep -Seconds 10
+            } else {
+                Write-Host "Failed to download the Pieces Desktop installer."
+            }
+        env:
+          FORCE_COLOR: "3"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
