@@ -1,4 +1,4 @@
-name: TestDriver.ai 
+name: TestDriver.ai
 
 permissions:
   actions: read
@@ -17,23 +17,33 @@ jobs:
         with:
           key: ${{ secrets.TESTDRIVER_API_KEY }}
           prompt: |
-            1. /generate desktop 10
+            1. /run testdriver/test.yml
           prerun: |
             Get-NetIPAddress -AddressFamily IPv6
-            # URL for the Pieces Desktop installer (Windows)
-            $installerUrl = "https://builds.pieces.app/stages/production/pieces_suite_windows/appinstaller/download"
-            # Location to save the installer
-            $installerPath = "$env:USERPROFILE\Downloads\PiecesInstaller.exe"
-            # Download the Pieces Desktop installer
-            Write-Host "Downloading Pieces Desktop installer..."
-            Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath
-            # Check if the download was successful
-            if (Test-Path $installerPath) {
-                Write-Host "Download successful. Running the installer..."
-                Start-Process -FilePath $installerPath -ArgumentList '/silent' -Wait
-                Start-Sleep -Seconds 10
+            $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
+            $appInstallerUrl = "https://builds.pieces.app/stages/production/pieces_for_x/windows-exe/download"
+            $osInstallerPath = "$env:USERPROFILE\Downloads\out-windows.exe"
+            $appInstallerPath = "$env:USERPROFILE\Downloads\out-windows (1).exe"
+            function Install-Application($installerUrl, $installerPath, $appName) {
+                Write-Host "Downloading $appName installer..."
+                Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath
+                if (Test-Path $installerPath) {
+                    Write-Host "Download successful. Running the $appName installer..."
+                    Start-Process -FilePath $installerPath -ArgumentList '/S' -Wait
+                    Start-Sleep -Seconds 10
+                } else {
+                    Write-Host "Failed to download the $appName installer."
+                }
+            }
+            Install-Application $osInstallerUrl $osInstallerPath "Pieces OS Server"
+            Install-Application $appInstallerUrl $appInstallerPath "Pieces Application"
+            Write-Host "Attempting to start the Pieces application..."
+            $piecesExePath = "C:\Program Files\Pieces for Developers\pieces_for_x.exe"  # Update this path if necessary
+            if (Test-Path $piecesExePath) {
+                Start-Process -FilePath $piecesExePath
+                Write-Host "Pieces application started successfully."
             } else {
-                Write-Host "Failed to download the Pieces Desktop installer."
+                Write-Host "Failed to find the Pieces application executable."
             }
         env:
           FORCE_COLOR: "3"
