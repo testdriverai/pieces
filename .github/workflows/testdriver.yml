@@ -21,53 +21,52 @@ jobs:
           prompt: |
             1. /run testdriver/test.yml
           prerun: |
-            # Define variables
+           # Define variables
             $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
             $appInstallerUrl = "https://builds.pieces.app/stages/production/pieces_for_x/windows-exe/download"
             $osInstallerPath = "$env:USERPROFILE\Downloads\out-windows.exe"
             $appInstallerPath = "$env:USERPROFILE\Downloads\out-windows (1).exe"
 
             function Install-Application($installerUrl, $installerPath, $appName) {
-              Write-Host "$(Get-Date -Format G): Starting download of $appName installer..."
+                Write-Host "$(Get-Date -Format G): Starting download of $appName installer..."
 
-              # Create WebClient object
-              $webClient = New-Object System.Net.WebClient
+                # Use Start-BitsTransfer for better control over the download
+                $downloadJob = Start-BitsTransfer -Source $installerUrl -Destination $installerPath -Asynchronous
 
-              # Event handler for download progress
-              $webClient.DownloadProgressChanged += {
-                $percent = $_.ProgressPercentage
-                Write-Host "$(Get-Date -Format G): Downloading $appName - $percent% complete"
-              }
+                # Monitor the download progress
+                while ($downloadJob.JobState -eq "Transferring") {
+                    $progress = ($downloadJob.BytesTransferred / $downloadJob.BytesTotal) * 100
+                    Write-Host "$(Get-Date -Format G): Downloading $appName - $([math]::Round($progress, 2))% complete"
+                    Start-Sleep -Seconds 5
+                }
 
-              # Download file asynchronously
-              $webClient.DownloadFileAsync($installerUrl, $installerPath)
+                # Wait for the job to complete and check for errors
+                $downloadJob | Wait-BitsTransfer -ErrorAction Stop
+                Write-Host "$(Get-Date -Format G): $appName installer download complete."
 
-              while ($webClient.IsBusy) {
-                Start-Sleep -Milliseconds 500
-              }
-
-              Write-Host "$(Get-Date -Format G): $appName installer download complete."
-
-              if (Test-Path $installerPath) {
-                Write-Host "$(Get-Date -Format G): Running the $appName installer..."
-                Start-Process -FilePath $installerPath -ArgumentList '/S' -Wait
-                Start-Sleep -Seconds 10
-              } else {
-                Write-Host "$(Get-Date -Format G): Failed to download the $appName installer."
-              }
+                # Run the installer if download is successful
+                if (Test-Path $installerPath) {
+                    Write-Host "$(Get-Date -Format G): Running the $appName installer..."
+                    Start-Process -FilePath $installerPath -ArgumentList '/S' -Wait
+                    Start-Sleep -Seconds 10
+                } else {
+                    Write-Host "$(Get-Date -Format G): Failed to download the $appName installer."
+                }
             }
 
+            # Run installations
             Install-Application $osInstallerUrl $osInstallerPath "Pieces OS Server"
             Install-Application $appInstallerUrl $appInstallerPath "Pieces Application"
 
+            # Attempt to start the application
             Write-Host "$(Get-Date -Format G): Attempting to start the Pieces application..."
-            $piecesExePath = "C:\Program Files\Pieces for Developers\pieces_for_x.exe"
+            $piecesExePath = "C:\Program Files\Pieces for Developers\pieces_for_x.exe"  # Update if necessary
 
             if (Test-Path $piecesExePath) {
-              Start-Process -FilePath $piecesExePath
-              Write-Host "$(Get-Date -Format G): Pieces application started successfully."
+                Start-Process -FilePath $piecesExePath
+                Write-Host "$(Get-Date -Format G): Pieces application started successfully."
             } else {
-              Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
+                Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
             }
         env:
           FORCE_COLOR: "3"
