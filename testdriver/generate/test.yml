@@ -1,0 +1,125 @@
+version: 4.0.78
+steps:
+  - prompt: focus "Pieces for Developers" application
+    commands:
+      - command: focus-application
+        name: Pieces for Developers
+  - prompt: >-
+      click on "light theme" and check if the theme changes to light, if it does
+      click on "dark theme" and check if the theme changes back to light
+    commands:
+      - command: hover-text
+        text: Light Theme
+        description: theme toggle option
+        action: click
+      - command: assert
+        expect: the theme is light
+      - command: hover-text
+        text: Dark Theme
+        description: theme toggle option
+        action: click
+      - command: assert
+        expect: the theme is dark
+  - prompt: click on get started
+    commands:
+      - command: hover-text
+        text: Get Started
+        description: button to begin the process
+        action: click
+  - prompt: >-
+      so here the sentences have a placeholder which can be changed by clicking
+      on the drop-down icon, click on software engineer and choose student,
+      similarliy click on star and select less than 1, click on full stack and
+      select mobile, click somewhere outside the drop-window to close it, click
+      on JavaScript and select c, click on AI Copilot and select AI Copilot and
+      Saved Materials, finally click on next button at the bottom right
+    commands:
+      - command: hover-text
+        text: Software Developer
+        description: dropdown to select role
+        action: click
+      - command: hover-text
+        text: Student
+        description: option to select student role
+        action: click
+      - command: hover-text
+        text: 1-2
+        description: dropdown to select experience
+        action: click
+      - command: hover-text
+        text: Less than 1
+        description: option to select < 1
+        action: click
+      - command: hover-text
+        text: Full-Stack
+        description: dropdown to select project type
+        action: click
+      - command: hover-text
+        text: Mobile
+        description: option to select mobile projects
+        action: click
+      - command: hover-text
+        text: JavaScript
+        description: dropdown to select coding language
+        action: click
+      - command: hover-text
+        text: C
+        description: option to select C language
+        action: click
+      - command: hover-text
+        text: AI Copilot
+        description: dropdown to select productivity tool
+        action: click
+      - command: hover-text
+        text: AI Copilot and Saved Materials
+        description: option to select AI Copilot and Saved Materials
+        action: click
+      - command: hover-text
+        text: ML Processing & Copilot
+        description: next button at the bottom right
+        action: click
+  - prompt: >-
+      click on medium and select high, click on the drop down for select model,
+      scroll to the bottom, scroll back and select Claude 3.5 Sonnet, click on
+      Turn on and click on next
+    commands:
+      - command: hover-text
+        text: Medium
+        description: dropdown to select enrichment level
+        action: click
+      - command: hover-text
+        text: High
+        description: option to select high enrichment level
+        action: click
+      - command: hover-text
+        text: Claude 3.5 Sonnet
+        description: dropdown to select model
+        action: click
+      - command: scroll
+        direction: down
+      - command: scroll
+        direction: up
+      - command: hover-text
+        text: Claude 3.5 Sonnet
+        description: option to select Claude 3.5 Sonnet model
+        action: click
+      - command: hover-text
+        text: Turn On
+        description: button to activate feature
+        action: click
+      - command: hover-text
+        text: Cloud Accounts & Integrations
+        description: next button at the bottom right
+        action: click
+  - prompt: >-
+      click on continue anonymously and wait for 3 seconds and check if it
+      contains some code snippets
+    commands:
+      - command: hover-text
+        text: Continue Anonymously
+        description: button to proceed without signing in
+        action: click
+      - command: wait
+        timeout: 3000
+      - command: assert
+        expect: the screen contains code snippets and some theoretical content

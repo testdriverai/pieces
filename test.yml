@@ -1,0 +1,119 @@
+version: 4.0.71
+steps:
+  - prompt: open pieces using keyboard
+    commands:
+      - command: press-keys
+        keys:
+          - command
+          - space
+      - command: type
+        text: Pieces
+      - command: press-keys
+        keys:
+          - enter
+  - prompt: click on dark theme and check if the theme changes
+    commands:
+      - command: hover-text
+        text: Dark Theme
+        description: toggle for dark theme
+        action: click
+      - command: assert
+        expect: the theme changes to dark
+  - prompt: click on light theme and check if the theme changes
+    commands:
+      - command: hover-text
+        text: Light Theme
+        description: toggle for light theme
+        action: click
+      - command: assert
+        expect: the theme changes to light
+  - prompt: click on Personalization Preferences and check if the next page is open
+    commands:
+      - command: hover-text
+        text: Personalization Preferences
+        description: button at the bottom right
+        action: click
+      - command: wait-for-text
+        text: Personalization Settings
+  - prompt: select few options and click on next arrow
+    commands:
+      - command: hover-text
+        text: DevOps
+        description: option under Developer Persona & Languages
+        action: click
+      - command: hover-text
+        text: JavaScript
+        description: option under Developer Persona & Languages
+        action: click
+      - command: hover-text
+        text: VS Code
+        description: option under Typical Toolchain
+        action: click
+      - command: hover-text
+        text: Intermediate
+        description: option under Experience Level
+        action: click
+      - command: hover-text
+        text: Next
+        description: next arrow at the bottom right
+        action: click
+  - prompt: select few options and click on next arrow
+    commands:
+      - command: hover-text
+        text: Copilot Chats
+        description: option under Default to Generative Workflow
+        action: click
+      - command: hover-text
+        text: Neural Code Search
+        description: option under Select your Default Search Engine
+        action: click
+      - command: hover-text
+        text: Recent
+        description: option under Select your Default Sort Mode
+        action: click
+      - command: hover-text
+        text: Auto-Enrichment & Copilot
+        description: next arrow at the bottom right
+        action: click
+  - prompt: select few options and click on next arrow
+    commands:
+      - command: hover-text
+        text: Blended
+        description: option under Specify Preferred AI/ML Enrichment Mode
+        action: click
+      - command: hover-text
+        text: GPT-4o
+        description: option under Specify Your Default LLM Runtimes
+        action: click
+      - command: hover-text
+        text: Add Local Projects
+        description: option under Specify Recent Repositories for Local Pre-Indexing
+        action: click
+      - command: hover-text
+        text: Cloud Accounts & Integrations
+        description: next arrow at the bottom right
+        action: click
+  - prompt: for cloud subdomain use testdriver.pieces.app and click on finish button
+    commands:
+      - command: hover-text
+        text: tarun
+        description: current subdomain input field
+        action: click
+      - command: type
+        text: testdriver
+      - command: hover-text
+        text: Finish Onboarding
+        description: finish button at the bottom right
+        action: click
+  - prompt: for cloud subdomain use testdriver.pieces.app and click on finish button
+    commands:
+      - command: hover-text
+        text: Cloud Subdomain
+        description: input field for cloud subdomain
+        action: click
+      - command: type
+        text: testdriver.pieces.app
+      - command: hover-text
+        text: Finish
+        description: button to complete the setup
+        action: click
