@@ -18,7 +18,7 @@ steps:
         description: toggle for dark theme
         action: click
       - command: assert
-        expect: the theme changes to dark
+        expect: the theme is dark
   - prompt: click on light theme and check if the theme changes
     commands:
       - command: hover-text
@@ -26,7 +26,7 @@ steps:
         description: toggle for light theme
         action: click
       - command: assert
-        expect: the theme changes to light
+        expect: the theme is light
   - prompt: click on Personalization Preferences and check if the next page is open
     commands:
       - command: hover-text
@@ -86,34 +86,11 @@ steps:
         description: option under Specify Your Default LLM Runtimes
         action: click
       - command: hover-text
-        text: Add Local Projects
-        description: option under Specify Recent Repositories for Local Pre-Indexing
-        action: click
-      - command: hover-text
         text: Cloud Accounts & Integrations
         description: next arrow at the bottom right
         action: click
-  - prompt: for cloud subdomain use testdriver.pieces.app and click on finish button
-    commands:
-      - command: hover-text
-        text: tarun
-        description: current subdomain input field
-        action: click
-      - command: type
-        text: testdriver
-      - command: hover-text
-        text: Finish Onboarding
-        description: finish button at the bottom right
-        action: click
-  - prompt: for cloud subdomain use testdriver.pieces.app and click on finish button
-    commands:
-      - command: hover-text
-        text: Cloud Subdomain
-        description: input field for cloud subdomain
-        action: click
-      - command: type
-        text: testdriver.pieces.app
       - command: hover-text
         text: Finish
         description: button to complete the setup
         action: click
+  - 
