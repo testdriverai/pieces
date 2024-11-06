@@ -27,11 +27,8 @@ steps:
         description: button to begin the process
         action: click
   - prompt: >-
-      so here the sentences have a placeholder which can be changed by clicking
-      on the drop-down icon, so in I am "select", click on "select" and choose student,
-      similarliy click on "Select" years of experience and select less than 1, click on "Select" projects and
-      select mobile, click somewhere outside the drop-window to close it, click
-      on I mostly code in "Select" and select c, click I want to boost my productivity "Select" and select AI Copilot and Saved Materials, finally click on next button at the bottom right
+      so here the sentences have a placeholder called "Select"which can be changed by clicking on it, click on "select" and choose student,
+      similarliy click on "Select" years of experience and select less than 1, click on "Select" projects and select mobile, click somewhere outside the drop-window to close it, click on I mostly code in "Select" and select c, click I want to boost my productivity "Select" and select AI Copilot and Saved Materials, finally click on next button at the bottom right
     commands:
       - command: hover-text
         text: Select
@@ -46,7 +43,7 @@ steps:
         description: dropdown to select experience
         action: click
       - command: hover-text
-        text: Less than 1
+        text: < 1
         description: option to select < 1
         action: click
       - command: hover-text
@@ -58,7 +55,7 @@ steps:
         description: option to select mobile projects
         action: click
       - command: hover-text
-        text: JavaScript
+        text: Select
         description: dropdown to select coding language
         action: click
       - command: hover-text
@@ -66,7 +63,7 @@ steps:
         description: option to select C language
         action: click
       - command: hover-text
-        text: AI Copilot
+        text: Select
         description: dropdown to select productivity tool
         action: click
       - command: hover-text
@@ -78,7 +75,7 @@ steps:
         description: next button at the bottom right
         action: click
   - prompt: >-
-      click on medium and select high, click on the drop down for select model,
+      click on "Select" and select high, click on the drop down for select model,
       scroll to the bottom, scroll back and select Claude 3.5 Sonnet, click on
       Turn on and click on next
     commands:
@@ -112,7 +109,7 @@ steps:
         action: click
   - prompt: >-
       click on continue anonymously and wait for 3 seconds and check if it
-      contains some code snippets
+      contains some code snippets or some theoritical content about programming
     commands:
       - command: hover-text
         text: Continue Anonymously
@@ -121,4 +118,4 @@ steps:
       - command: wait
         timeout: 3000
       - command: assert
-        expect: the screen contains code snippets and some theoretical content
+        expect: the screen contains code snippets and some theoretical content about programming
