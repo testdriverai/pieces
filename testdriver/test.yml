@@ -28,14 +28,13 @@ steps:
         action: click
   - prompt: >-
       so here the sentences have a placeholder which can be changed by clicking
-      on the drop-down icon, click on software engineer and choose student,
-      similarliy click on star and select less than 1, click on full stack and
+      on the drop-down icon, so in I am "select", click on "select" and choose student,
+      similarliy click on "Select" years of experience and select less than 1, click on "Select" projects and
       select mobile, click somewhere outside the drop-window to close it, click
-      on JavaScript and select c, click on AI Copilot and select AI Copilot and
-      Saved Materials, finally click on next button at the bottom right
+      on I mostly code in "Select" and select c, click I want to boost my productivity "Select" and select AI Copilot and Saved Materials, finally click on next button at the bottom right
     commands:
       - command: hover-text
-        text: Software Developer
+        text: Select
         description: dropdown to select role
         action: click
       - command: hover-text
@@ -43,7 +42,7 @@ steps:
         description: option to select student role
         action: click
       - command: hover-text
-        text: 1-2
+        text: Select
         description: dropdown to select experience
         action: click
       - command: hover-text
