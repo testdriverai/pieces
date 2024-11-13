@@ -43,8 +43,8 @@ steps:
         description: dropdown to select experience
         action: click
       - command: hover-text
-        text: < 1
-        description: option to select < 1
+        text: 3 - 5
+        description: option to select 3 - 5
         action: click
       - command: hover-text
         text: Full-Stack
