@@ -55,6 +55,10 @@ steps:
         description: option to select mobile projects
         action: click
       - command: hover-text
+        text: I mostly code in
+        description: text on page
+        action: click
+      - command: hover-text
         text: Select
         description: dropdown to select coding language
         action: click
