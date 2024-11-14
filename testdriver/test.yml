@@ -32,7 +32,7 @@ steps:
     commands:
       - command: hover-text
         text: Select
-        description: dropdown to select role
+        description: dropdown near "I am a"
         action: click
       - command: hover-text
         text: Student
@@ -48,7 +48,7 @@ steps:
         action: click
       - command: hover-text
         text: Full-Stack
-        description: dropdown to select project type
+        description: dropdown to select project types worked on
         action: click
       - command: hover-text
         text: Mobile
@@ -68,7 +68,7 @@ steps:
         action: click
       - command: hover-text
         text: Select
-        description: dropdown to select productivity tool
+        description: dropdown to select boost my productivity
         action: click
       - command: hover-text
         text: AI Copilot and Saved Materials
