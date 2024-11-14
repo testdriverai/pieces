@@ -63,7 +63,7 @@ steps:
         description: dropdown to select coding language
         action: click
       - command: hover-text
-        text: C
+        text: Coffeescript
         description: option to select C language
         action: click
       - command: hover-text
