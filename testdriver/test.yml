@@ -32,7 +32,7 @@ steps:
     commands:
       - command: hover-text
         text: Select
-        description: dropdown near "I am a"
+        description: first dropdown near "I am a"
         action: click
       - command: hover-text
         text: Student
