@@ -20,6 +20,7 @@ jobs:
           key: ${{ secrets.TESTDRIVER_API_KEY }}
           prompt: |
             1. /run testdriver/test.yml
+            2. /run testdriver/ltm.yml
           prerun: |
             # Define variables
             $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
