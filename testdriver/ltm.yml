@@ -41,17 +41,11 @@ steps:
         action: hover
       - command: assert
         expect: the checkbox is enabled
-  - prompt: open chrome
+  - prompt: open chrome from the taskbar
     commands:
-      - command: press-keys
-        keys:
-          - command
-          - space
-      - command: type
-        text: Google Chrome
-      - command: press-keys
-        keys:
-          - enter
+      - command: hover-image
+        description: Google Chrome icon in the dock
+        action: click
   - prompt: search google in chrome for 5 * 5
     commands:
       - command: focus-application
@@ -100,7 +94,7 @@ steps:
       - command: focus-application
         name: Pieces
       - command: hover-image
-        description: send message button in Pieces chat
+        description: send message button in Pieces chat (blue send button the right of chat)
         action: click
   - prompt: assert that Pieces bot gives a response saying the result was 25
     commands:
