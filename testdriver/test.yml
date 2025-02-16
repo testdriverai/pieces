@@ -99,7 +99,7 @@ steps:
         description: next button at the bottom right
         action: click
   - prompt: >-
-      click on continue anonymously and wait for 3 seconds and check if it
+      click on continue anonymously and wait for 15 seconds and check if it
       contains some code snippets or some theoritical content about programming
     commands:
       - command: hover-text
@@ -107,6 +107,6 @@ steps:
         description: button to proceed without signing in
         action: click
       - command: wait
-        timeout: 3000
+        timeout: 15000
       - command: assert
         expect: the screen contains code snippets and some theoretical content about programming
