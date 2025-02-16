@@ -80,8 +80,7 @@ steps:
         action: click
   - prompt: >-
       click on "Select" and select high, click on the drop down for select model,
-      scroll to the bottom, scroll back and select Claude 3.5 Sonnet, click on
-      Turn on and click on next
+      scroll to the bottom, click on Turn on and click on next
     commands:
       - command: hover-text
         text: Medium
@@ -90,18 +89,6 @@ steps:
       - command: hover-text
         text: High
         description: option to select high enrichment level
-        action: click
-      - command: hover-text
-        text: Claude 3.5 Sonnet
-        description: dropdown to select default LLM
-        action: click
-      - command: scroll
-        direction: down
-      - command: scroll
-        direction: up
-      - command: hover-text
-        text: Claude 3.5 Sonnet
-        description: option to select Claude 3.5 Sonnet model
         action: click
       - command: hover-text
         text: Turn On
