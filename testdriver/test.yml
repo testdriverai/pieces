@@ -115,5 +115,13 @@ steps:
       - command: focus-application
         name: Pieces
       - command: hover-image
-        description: X icon to the right of Click to activate long term memory
+        description: close button in the the Pieces window
         action: click
+  - prompt: click the X icon to the to close the tour dialog in Pieces
+    commands:
+      - command: focus-application
+        name: Pieces
+      - command: hover-image
+        description: close button in the the Pieces window
+        action: click
+
