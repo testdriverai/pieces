@@ -110,3 +110,7 @@ steps:
         timeout: 15000
       - command: assert
         expect: the screen contains code snippets and some theoretical content about programming
+      - command: hover-text
+        text: Click to activate Long-Term Memory
+        description: the button that says activate Long-Term Memory
+        action: click
