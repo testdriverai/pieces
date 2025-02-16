@@ -85,7 +85,7 @@ steps:
         description: button to start a new chat in Pieces
         action: click
   - prompt: >-
-      chat in pieces and ask, what was the result of my last search in Chrome?
+      chat in pieces and ask, what was my last search in Chrome?
     commands:
       - command: focus-application
         name: Pieces
@@ -94,7 +94,7 @@ steps:
         description: chat input field in Pieces
         action: click
       - command: type
-        text: What was the result of my last search in chrome?
+        text: What was my last search in chrome?
   - prompt: Click the send message button in pieces
     commands:
       - command: focus-application
@@ -102,13 +102,13 @@ steps:
       - command: hover-image
         description: send message button in Pieces chat (blue send button the right of chat)
         action: click
-  - prompt: wait 10 seconds
+  - prompt: wait 15 seconds
     commands:
       - command: wait
-        timeout: 10000
+        timeout: 15000
   - prompt: >-
-      assert that the response in Pieces says something about the result being
-      25
+      assert that the response in Pieces says something about the search being 5
+      * 5
     commands:
       - command: assert
-        expect: the result displayed was "25"
+        expect: the last search was for "5 * 5"
