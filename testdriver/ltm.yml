@@ -2,13 +2,17 @@ version: 4.2.12
 session: 67b0fa8fdcf227a33f2394a5
 steps:
   - prompt: >-
-      open settings in Pieces by clicking the icon that looks like a small gear
-      in the bottom left of the window
+      in Pieces, click the profile icon, and then click All Settings in the menu
+      that opens
     commands:
       - command: focus-application
         name: Pieces
       - command: hover-image
-        description: small gear icon in the bottom left of the Pieces application
+        description: profile icon in the top right corner of the Pieces application
+        action: click
+      - command: hover-text
+        text: All Settings
+        description: menu item for All Settings in the Pieces application
         action: click
   - prompt: click copilot chats in the sidebar of settings in pieces
     commands:
