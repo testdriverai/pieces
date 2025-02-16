@@ -91,7 +91,7 @@ steps:
         description: option to select high enrichment level
         action: click
       - command: hover-text
-        text: Turn On
+        text: Activate
         description: button to activate feature
         action: click
       - command: hover-text
