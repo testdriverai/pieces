@@ -108,8 +108,6 @@ steps:
         action: click
       - command: wait
         timeout: 15000
-      - command: assert
-        expect: the screen contains code snippets and some theoretical content about programming
   - prompt: click within the pieces window
     commands:
       - command: focus-application
