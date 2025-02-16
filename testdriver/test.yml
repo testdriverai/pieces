@@ -93,7 +93,7 @@ steps:
         action: click
       - command: hover-text
         text: Claude 3.5 Sonnet
-        description: dropdown to select model
+        description: dropdown to select default LLM
         action: click
       - command: scroll
         direction: down
