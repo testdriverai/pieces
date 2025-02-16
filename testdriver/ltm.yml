@@ -1,12 +1,14 @@
 version: 4.2.12
 session: 67b0fa8fdcf227a33f2394a5
 steps:
-  - prompt: click the settings icon in pieces
+  - prompt: >-
+      open settings in Pieces by clicking the icon that looks like a small gear
+      in the bottom left of the window
     commands:
       - command: focus-application
         name: Pieces
       - command: hover-image
-        description: settings icon in the bottom left corner of the Pieces application
+        description: small gear icon in the bottom left of the Pieces application
         action: click
   - prompt: click copilot chats in the sidebar of settings in pieces
     commands:
