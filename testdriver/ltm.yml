@@ -85,7 +85,7 @@ steps:
         description: button to start a new chat in Pieces
         action: click
   - prompt: >-
-      chat in pieces and ask, what did I last search in Chrome?
+      chat in pieces and ask, what was the result of my last search in Chrome?
     commands:
       - command: focus-application
         name: Pieces
@@ -94,7 +94,7 @@ steps:
         description: chat input field in Pieces
         action: click
       - command: type
-        text: What did I last search in chrome?
+        text: What was the result of my last search in chrome?
   - prompt: Click the send message button in pieces
     commands:
       - command: focus-application
