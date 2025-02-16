@@ -110,12 +110,13 @@ steps:
         timeout: 15000
       - command: assert
         expect: the screen contains code snippets and some theoretical content about programming
-  - prompt: click the X icon to the right of Click to activate long term memory in pieces
+  - prompt: click within the pieces window
     commands:
       - command: focus-application
         name: Pieces
-      - command: hover-image
-        description: close button in the the Pieces window
+      - command: hover-text
+        text: Pieces Copilot
+        description: main area within the Pieces window
         action: click
   - prompt: click the X icon to the to close the tour dialog in Pieces
     commands:
