@@ -16,31 +16,22 @@ steps:
         action: click
   - prompt: click copilot chats in the sidebar of settings in pieces
     commands:
-      - command: focus-application
-        name: Pieces
       - command: hover-text
         text: Copilot Chats
         description: copilot chats option in the sidebar of settings in Pieces
         action: click
   - prompt: >-
-      enable the check box directly to the right of Use Long-Term Memory (LTM)
-      Context by Default if it is not already enabled in pieces
+      Ensure the checkbox directly to the right of Use Long-Term Memory (LTM)
+      Context by Default is checked; check it if it is not
     commands:
-      - command: focus-application
-        name: Pieces
       - command: hover-text
         text: Use Long-Term Memory (LTM) Context by Default
-        description: LTM context checkbox in Copilot settings
-        action: hover
-      - command: hover-image
-        description: checkbox for LTM context
+        description: checkbox beside the text to enable LTM Context
         action: click
   - prompt: >-
       assert that the check box directly to the right of Use Long-Term Memory
       (LTM) Context by Default is enabled
     commands:
-      - command: focus-application
-        name: Pieces
       - command: hover-text
         text: Use Long-Term Memory (LTM) Context by Default
         description: LTM context checkbox in Copilot settings
@@ -71,15 +62,11 @@ steps:
         name: Pieces
   - prompt: click the back arrow next to settings in pieces to go back to the chat
     commands:
-      - command: focus-application
-        name: Pieces
       - command: hover-image
         description: back arrow next to settings in Pieces
         action: click
   - prompt: Click new chat in Pieces
     commands:
-      - command: focus-application
-        name: Pieces
       - command: hover-text
         text: New chat
         description: button to start a new chat in Pieces
@@ -87,8 +74,6 @@ steps:
   - prompt: >-
       chat in pieces and ask, what was my last search in Chrome?
     commands:
-      - command: focus-application
-        name: Pieces
       - command: hover-text
         text: Paste code, drag and drop an image, or ask a technical question...
         description: chat input field in Pieces
@@ -97,8 +82,6 @@ steps:
         text: What was my last search in chrome?
   - prompt: Click the send message button in pieces
     commands:
-      - command: focus-application
-        name: Pieces
       - command: hover-image
         description: send message button in Pieces chat (blue send button the right of chat)
         action: click
