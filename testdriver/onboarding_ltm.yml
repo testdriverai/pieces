@@ -1,0 +1,91 @@
+version: 4.2.12
+session: 67bb5ef67739a18d6e691ed6
+steps:
+  - prompt: click the highlight LTM Context in Pieces
+    commands:
+      - command: hover-text
+        text: LTM Context
+        description: LTM Context button in Pieces application
+        action: click
+  - prompt: click the circle above the highlighted LTM Context text
+    commands:
+      - command: hover-image
+        description: circle icon above the LTM Context text in Pieces application
+        action: click
+  - prompt: click I'm In
+    commands:
+      - command: hover-text
+        text: I'm In
+        description: I'm In button in the Pieces application
+        action: click
+  - prompt: click Generate Secret Message
+    commands:
+      - command: hover-text
+        text: Generate Secret Message
+        description: Generate Secret Message button in the Pieces application
+        action: click
+  - prompt: scroll in chrome until Copy Prompt is visible, and click it
+    commands:
+      - command: focus-application
+        name: Google Chrome
+      - command: scroll-until-text
+        text: Copy Prompt
+        direction: down
+        method: keyboard
+      - command: hover-text
+        text: Copy Prompt
+        description: Copy Prompt button in the webpage
+        action: click
+  - prompt: >-
+      focus pieces, click into the pieces chatbox that says Paste code, paste, and click enter to send
+    commands:
+      - command: focus-application
+        name: Pieces for Developers
+      - command: hover-text
+        text: Paste code, drag and drop an image, or ask a technical question...
+        description: chatbox in Pieces for Developers
+        action: click
+      - command: press-keys
+        keys:
+          - control
+          - v
+      - command: press-keys
+        keys:
+          - enter
+  - prompt: wait 5 seconds
+    commands:
+      - command: wait
+        timeout: 5000
+  - prompt: click I'm Ready
+    commands:
+      - command: hover-text
+        text: I'm Ready
+        description: button at the bottom of the Pieces dialog
+        action: click
+  - prompt: assert Pieces says Your secret message is, followed by a message
+    commands:
+      - command: assert
+        expect: Pieces says Your secret message is, followed by a message
+  - prompt: click new chat in pieces
+    commands:
+      - command: hover-text
+        text: New Chat
+        description: button to start a new chat in Pieces
+        action: click
+  - prompt: click LTM Context in pieces
+    commands:
+      - command: hover-text
+        text: LTM Context
+        description: button to toggle LTM Context in Pieces
+        action: click
+  - prompt: >-
+      assert Use LTM Context for Future Chats? Pops up, then click Enable in
+      pieces
+    commands:
+      - command: assert
+        expect: Use LTM Context for Future Chats? popup is visible
+      - command: hover-text
+        text: Enable
+        description: button to enable LTM Context in Pieces
+        action: click
+
