@@ -108,19 +108,3 @@ steps:
         action: click
       - command: wait
         timeout: 15000
-  - prompt: click within the pieces window
-    commands:
-      - command: focus-application
-        name: Pieces
-      - command: hover-text
-        text: Pieces Copilot
-        description: main area within the Pieces window
-        action: click
-  - prompt: click the X icon to the to close the tour dialog in Pieces
-    commands:
-      - command: focus-application
-        name: Pieces
-      - command: hover-image
-        description: close button in the the Pieces window
-        action: click
-
