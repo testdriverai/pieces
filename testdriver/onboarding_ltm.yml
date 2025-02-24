@@ -50,10 +50,10 @@ steps:
       - command: press-keys
         keys:
           - enter
-  - prompt: wait 5 seconds
+  - prompt: wait 15 seconds
     commands:
       - command: wait
-        timeout: 5000
+        timeout: 15000
   - prompt: click I'm Ready
     commands:
       - command: hover-text
