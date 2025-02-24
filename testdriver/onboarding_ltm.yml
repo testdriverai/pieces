@@ -51,7 +51,7 @@ steps:
         description: Copy Prompt button in the webpage
         action: click
   - prompt: close the current chrome tab
-      commands:
+    commands:
       - command: focus-application
         name: Google Chrome
       - command: press-keys
