@@ -24,6 +24,22 @@ steps:
         text: Generate Secret Message
         description: Generate Secret Message button in the Pieces application
         action: click
+  - prompt: wait 2 seconds
+    commands:
+      - command: wait
+        timeout: 2000
+  - prompt: focus chrome and refresh the page
+    commands:
+      - command: focus-application
+        name: Google Chrome
+      - command: press-keys
+        keys:
+          - command
+          - r
+  - prompt: wait 2 seconds
+    commands:
+      - command: wait
+        timeout: 2000
   - prompt: click on copy prompt button
     commands:
       - command: focus-application
