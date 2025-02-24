@@ -24,18 +24,10 @@ steps:
         text: Generate Secret Message
         description: Generate Secret Message button in the Pieces application
         action: click
-  - prompt: scroll in chrome until Copy Prompt is visible, and click it
+  - prompt: click on copy prompt button
     commands:
       - command: focus-application
         name: Google Chrome
-      - command: scroll-until-text
-        text: Copy Prompt
-        direction: down
-        method: keyboard
-      - command: hover-text
-        text: Copy Prompt
-        description: Copy Prompt button in the webpage
-        action: click
       - command: wait
         timeout: 2000
       - command: hover-text
