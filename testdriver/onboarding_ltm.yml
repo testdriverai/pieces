@@ -50,6 +50,12 @@ steps:
         text: Copy Prompt
         description: Copy Prompt button in the webpage
         action: click
+  - prompt: close the current chrome tab
+      commands:
+      - command: focus-application
+        name: Google Chrome
+      - command: press-keys
+        keys: [command, w]
   - prompt: >-
       focus pieces, click into the pieces chatbox that says Paste code, paste, and click enter to send
     commands:
