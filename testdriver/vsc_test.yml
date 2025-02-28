@@ -1,0 +1,67 @@
+version: 4.2.12
+session: 67c243ebfef1a88a7aed066d
+steps:
+  - prompt: open the python file from the desktop in vs code
+    commands:
+      - command: focus-application
+        name: Visual Studio Code
+  - prompt: open the python file from the desktop in vs code
+    commands:
+      - command: focus-application
+        name: Visual Studio Code
+      - command: hover-text
+        text: gistfile1.py
+        description: Python file on the desktop
+        action: right-click
+      - command: hover-text
+        text: Open with Code
+        description: context menu option to open with Visual Studio Code
+        action: click
+  - prompt: focus pieces and click new chat
+    commands:
+      - command: focus-application
+        name: Pieces for Developers
+  - prompt: focus pieces and click new chat
+    commands:
+      - command: focus-application
+        name: Pieces for Developers
+      - command: hover-text
+        text: New Chat
+        description: button to start a new chat in Pieces for Developers
+        action: click
+  - prompt: >-
+      ask in pieces, in the chatbox where it says paste code, What is the
+      function, purpose, and language of the code I opened in vs code?
+    commands:
+      - command: hover-text
+        text: Paste code, drag and drop an image, or ask a technical question...
+        description: chat input area in Pieces for Developers
+        action: click
+      - command: type
+        text: >-
+          What is the function, purpose, and language of the code I opened in VS
+          Code?
+  - prompt: >-
+      ask in pieces, in the chatbox where it says paste code, What is the
+      function, purpose, and language of the code I opened in vs code? then
+      click enter to send
+    commands:
+      - command: hover-text
+        text: Paste code, drag and drop an image, or ask a technical question...
+        description: chatbox input area in Pieces for Developers
+        action: click
+      - command: type
+        text: >-
+          What is the function, purpose, and language of the code I opened in VS
+          Code?
+      - command: press-keys
+        keys:
+          - enter
+  - prompt: >-
+      assert that the response returned in pieces gives the function and purpose
+      of the function, and the language, which should be python
+    commands:
+      - command: assert
+        expect: >-
+          the response includes the function and purpose of the code, and the
+          language is Python
