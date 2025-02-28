@@ -85,6 +85,22 @@ jobs:
             } else {
               Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
             }
+
+            # Download and extract the Gist
+            $gistUrl = "https://github.com/gist/2660189/archive/main.zip"
+            $gistZipPath = "$env:USERPROFILE\Desktop\gist.zip"
+            $gistExtractPath = "$env:USERPROFILE\Desktop\gist"
+
+            Write-Host "$(Get-Date -Format G): Downloading Gist..."
+            Invoke-WebRequest -Uri $gistUrl -OutFile $gistZipPath
+
+            if (Test-Path $gistZipPath) {
+              Write-Host "$(Get-Date -Format G): Extracting Gist..."
+              Expand-Archive -Path $gistZipPath -DestinationPath $gistExtractPath -Force
+              Write-Host "$(Get-Date -Format G): Gist downloaded and extracted to $gistExtractPath."
+            } else {
+              Write-Host "$(Get-Date -Format G): Failed to download the Gist."
+            }
         env:
           FORCE_COLOR: "3"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
