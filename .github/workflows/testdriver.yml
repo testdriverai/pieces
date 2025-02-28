@@ -22,6 +22,7 @@ jobs:
             1. /run testdriver/onboarding.yml
             2. /run testdriver/onboarding_ltm.yml
             3. /run testdriver/ltm_test.yml
+            4. /run testdriver/vsc_test.yml
           prerun: |
             # Define variables
             $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
