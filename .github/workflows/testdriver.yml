@@ -93,19 +93,24 @@ jobs:
             }
 
             # Download and extract the Gist
-            $gistUrl = "https://github.com/gist/2660189/archive/main.zip"
+            $gistUrl = "https://gist.github.com/sirleech/2660189/archive/main.zip"
             $gistZipPath = "$env:USERPROFILE\Desktop\gist.zip"
             $gistExtractPath = "$env:USERPROFILE\Desktop\gist"
 
             Write-Host "$(Get-Date -Format G): Downloading Gist..."
-            Invoke-WebRequest -Uri $gistUrl -OutFile $gistZipPath
-
-            if (Test-Path $gistZipPath) {
-              Write-Host "$(Get-Date -Format G): Extracting Gist..."
-              Expand-Archive -Path $gistZipPath -DestinationPath $gistExtractPath -Force
-              Write-Host "$(Get-Date -Format G): Gist downloaded and extracted to $gistExtractPath."
-            } else {
-              Write-Host "$(Get-Date -Format G): Failed to download the Gist."
+            try {
+                Invoke-WebRequest -Uri $gistUrl -OutFile $gistZipPath -ErrorAction Stop
+                Write-Host "$(Get-Date -Format G): Gist downloaded successfully."
+                
+                if (Test-Path $gistZipPath) {
+                    Write-Host "$(Get-Date -Format G): Extracting Gist..."
+                    Expand-Archive -Path $gistZipPath -DestinationPath $gistExtractPath -Force
+                    Write-Host "$(Get-Date -Format G): Gist downloaded and extracted to $gistExtractPath."
+                } else {
+                    Write-Host "$(Get-Date -Format G): Gist ZIP file not found after download."
+                }
+            } catch {
+                Write-Host "$(Get-Date -Format G): Failed to download Gist. Error: $_"
             }
 
         env:
