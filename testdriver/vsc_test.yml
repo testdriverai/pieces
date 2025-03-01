@@ -26,7 +26,7 @@ steps:
         text: gist
         description: folder on the desktop
         action: double-click
-  - prompt: open the python file from the desktop in vs code
+  - prompt: open the python file from the folder in vs code
     commands:
       - command: hover-text
         text: gistfile1.py
