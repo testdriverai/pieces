@@ -48,10 +48,11 @@ steps:
         text: gistfile1.py
         description: tab with the Python file in VS Code
         action: click
-  - prompt: focus pieces and click new chat
+  - prompt: open pieces from the taskbar
     commands:
-      - command: focus-application
-        name: Pieces for Developers
+      - command: hover-image
+        description: Pieces for Developers icon on the taskbar
+        action: click
   - prompt: focus pieces and click new chat
     commands:
       - command: focus-application
