@@ -79,7 +79,7 @@ jobs:
               Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
             }
             # Download and extract the Gist
-            $gistUrl = "https://gist.github.com/2660189.git"
+            $gistUrl = "https://gist.github.com/sirleech/2660189/archive/0b9af3d393b95a84bba812bec3a20eb1832e9d61.zip"
             $gistZipPath = "$env:USERPROFILE\Desktop\gist.zip"
             $gistExtractPath = "$env:USERPROFILE\Desktop\gist"
             Write-Host "$(Get-Date -Format G): Downloading Gist..."
