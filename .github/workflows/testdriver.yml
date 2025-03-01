@@ -108,10 +108,15 @@ jobs:
                 Write-Host "$(Get-Date -Format G): Failed to download Gist. Error: $_"
             }
 
-            # Disable Windows Toast Notifications
-            Write-Host "$(Get-Date -Format G): Disabling Windows toast notifications..."
-            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNotifications" -Name "ToastEnabled" -Value 0 -PropertyType DWord -Force | Out-Null
-            Write-Host "$(Get-Date -Format G): Windows toast notifications disabled."
+            # Enable Focus Assist (Do Not Disturb)
+            Write-Host "$(Get-Date -Format G): Enabling Focus Assist (Do Not Disturb)..."
+            $focusAssistKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"
+            $focusAssistValueName = "NOC_GLOBAL_SETTING_VALUE"
+            
+            # Set Focus Assist to "Alarms only" (which is like Do Not Disturb)
+            Set-ItemProperty -Path $focusAssistKeyPath -Name $focusAssistValueName -Value 1
+            
+            Write-Host "$(Get-Date -Format G): Focus Assist (Do Not Disturb) enabled."
 
         env:
           FORCE_COLOR: "3"
