@@ -108,10 +108,3 @@ steps:
         text: Enable
         description: button to enable LTM Context in Pieces
         action: click
-  - prompt: close the current chrome tab
-    commands:
-      - command: focus-application
-        name: Google Chrome
-      - command: press-keys
-        keys: [command, w]
-
