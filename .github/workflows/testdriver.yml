@@ -18,11 +18,6 @@ jobs:
       - uses: testdriverai/action@main
         with:
           key: ${{ secrets.TESTDRIVER_API_KEY }}
-          prompt: |
-            1. /run testdriver/onboarding.yml
-            2. /run testdriver/onboarding_ltm.yml
-            3. /run testdriver/ltm_test.yml
-            4. /run testdriver/vsc_test.yml
           prerun: |
             # Define variables
             $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
@@ -112,6 +107,11 @@ jobs:
             } catch {
                 Write-Host "$(Get-Date -Format G): Failed to download Gist. Error: $_"
             }
+
+            # Disable Windows Toast Notifications
+            Write-Host "$(Get-Date -Format G): Disabling Windows toast notifications..."
+            New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\PushNotifications" -Name "ToastEnabled" -Value 0 -PropertyType DWord -Force | Out-Null
+            Write-Host "$(Get-Date -Format G): Windows toast notifications disabled."
 
         env:
           FORCE_COLOR: "3"
