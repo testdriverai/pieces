@@ -1,6 +1,19 @@
 version: 4.2.12
 session: 67c243ebfef1a88a7aed066d
 steps:
+  - prompt: minimize pieces
+    commands:
+      - command: press-keys
+        keys:
+          - command
+          - d
+      - command: press-keys
+        keys:
+          - alt
+          - space
+      - command: press-keys
+        keys:
+          - 'n'
   - prompt: open the python file from the desktop in vs code
     commands:
       - command: focus-application
