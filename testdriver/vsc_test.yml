@@ -20,17 +20,17 @@ steps:
       - command: press-keys
         keys:
           - 'n'
+  - prompt: open the gist folder on the desktop
+    commands:
+      - command: hover-text
+        text: gist
+        description: folder on the desktop
+        action: double-click
   - prompt: open the python file from the desktop in vs code
     commands:
-      - command: focus-application
-        name: Visual Studio Code
-  - prompt: open the python file from the desktop in vs code
-    commands:
-      - command: focus-application
-        name: Visual Studio Code
       - command: hover-text
         text: gistfile1.py
-        description: Python file on the desktop
+        description: Python file in the gist folder
         action: right-click
       - command: hover-text
         text: Open with Code
