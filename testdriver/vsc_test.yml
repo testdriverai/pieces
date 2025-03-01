@@ -1,6 +1,12 @@
 version: 4.2.12
 session: 67c243ebfef1a88a7aed066d
 steps:
+  - prompt: close the current chrome tab
+    commands:
+      - command: focus-application
+        name: Google Chrome
+      - command: press-keys
+        keys: [command, w]
   - prompt: minimize pieces
     commands:
       - command: press-keys
