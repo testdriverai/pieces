@@ -42,6 +42,12 @@ steps:
         text: Open with Code
         description: context menu option to open with Visual Studio Code
         action: click
+  - prompt: click the python file in the tabs of vs code
+    commands:
+      - command: hover-text
+        text: gistfile1.py
+        description: tab with the Python file in VS Code
+        action: click
   - prompt: focus pieces and click new chat
     commands:
       - command: focus-application
