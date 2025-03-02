@@ -68,18 +68,6 @@ steps:
         action: click
   - prompt: >-
       ask in pieces, in the chatbox where it says paste code, What is the
-      function, purpose, and language of the code I opened in vs code?
-    commands:
-      - command: hover-text
-        text: Paste code, drag and drop an image, or ask a technical question...
-        description: chat input area in Pieces for Developers
-        action: click
-      - command: type
-        text: >-
-          What is the function, purpose, and language of the code I opened in VS
-          Code?
-  - prompt: >-
-      ask in pieces, in the chatbox where it says paste code, What is the
       function, purpose, and language of the code I opened in vs code? then
       click enter to send
     commands:
