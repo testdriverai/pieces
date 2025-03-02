@@ -20,6 +20,12 @@ steps:
       - command: press-keys
         keys:
           - 'n'
+  - prompt: close the softare update window
+    commands:
+      - command: hover-text
+        text: Close
+        description: close button on the software update dialog
+        action: click
   - prompt: open the gist folder on the desktop
     commands:
       - command: hover-text
