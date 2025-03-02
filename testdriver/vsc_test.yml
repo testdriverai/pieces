@@ -48,20 +48,11 @@ steps:
         text: gistfile1.py
         description: tab with the Python file in VS Code
         action: click
-  - prompt: focus windows explorer and close it
+  - prompt: focus pieces for developers
     commands:
-      - command: focus-application
-        name: File Explorer
-      - command: press-keys
-        keys:
-          - alt
-          - f4
-  - prompt: click alt tab once to open pieces again
-    commands:
-      - command: press-keys
-        keys:
-          - alt
-          - tab
+      - command: hover-image
+        description: pieces application icon on the taskbar
+        action: click
   - prompt: focus pieces and click new chat
     commands:
       - command: focus-application
