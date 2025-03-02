@@ -53,6 +53,11 @@ steps:
       - command: hover-image
         description: pieces application icon on the taskbar
         action: click
+  - prompt: focus pieces for developers
+    commands:
+      - command: hover-image
+        description: pieces application icon on the taskbar
+        action: click
   - prompt: focus pieces and click new chat
     commands:
       - command: focus-application
