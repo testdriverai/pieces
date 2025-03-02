@@ -88,6 +88,10 @@ steps:
       - command: press-keys
         keys:
           - enter
+  - prompt: wait 20 seconds
+    commands:
+      - command: wait
+        timeout: 20000
   - prompt: >-
       assert that the response returned in pieces gives the function and purpose
       of the function, and the language, which should be python
