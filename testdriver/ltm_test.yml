@@ -1,10 +1,10 @@
 version: 4.2.12
 session: 67b0fa8fdcf227a33f2394a5
 steps:
-  - prompt: open chrome from the taskbar
+  - prompt: open chrome
     commands:
       - command: hover-image
-        description: Google Chrome icon in the dock
+        description: Google Chrome icon on the taskbar
         action: click
   - prompt: search google in chrome for 5 * 5
     commands:
