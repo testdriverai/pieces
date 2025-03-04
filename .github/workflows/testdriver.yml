@@ -1,8 +1,9 @@
 name: TestDriver.ai
 
 permissions:
-  actions: read
+  actions: write
   contents: write
+  statuses: write
   pull-requests: write
 
 on:
