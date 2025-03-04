@@ -1,4 +1,4 @@
-version: 4.0.78
+version: 4.2.12
 steps:
   - prompt: focus "Pieces for Developers" application
     commands:
