@@ -86,8 +86,20 @@ steps:
     commands:
       - command: assert
         expect: Pieces says Your secret message is, followed by a message
+  - prompt: >-
+      focus pieces and then focus chrome to check if the secret message returned
+      in the pieces chat is the same as the secret message displayed in chrome
+    commands:
+      - command: focus-application
+        name: Pieces for Developers
+      - command: focus-application
+        name: Google Chrome
+      - command: assert
+        expect: the secret message in Pieces matches the one in Chrome
   - prompt: click new chat in pieces
     commands:
+      - command: focus-application
+        name: Pieces for Developers
       - command: hover-text
         text: New Chat
         description: button to start a new chat in Pieces
