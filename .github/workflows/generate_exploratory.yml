@@ -1,0 +1,59 @@
+name: TestDriver.ai / Generate / Exploratory
+
+permissions:
+  actions: read
+  contents: write
+  statuses: write
+  pull-requests: write
+
+on:
+  workflow_call:
+    inputs:
+      website-url:
+        type: string
+        required: true
+        description: The URL of the website to test
+    secrets:
+      key:
+        required: true
+        description: The TestDriver API key
+      GH_TOKEN:
+        required: true
+        description: The GitHub token
+    outputs:
+      pr-branch:
+        value: ${{ jobs.exploratory.outputs.pr-branch }}
+
+jobs:
+  exploratory:
+    runs-on: ubuntu-latest
+    outputs:
+      pr-branch: ${{ steps.create-pr-branch.outputs.pr-branch }}
+    steps:
+      - name: Extract current branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      - id: create-pr-branch
+        name: Create PR branch name
+        shell: bash
+        run: echo "pr-branch=testdriver/exploratory-${{ github.run_id }}-${{ github.run_attempt }}" >> $GITHUB_OUTPUT
+      - uses: testdriverai/action@main
+        with:
+          key: ${{ secrets.key }}
+          prompt: |
+            1. /generate web 10
+            2. /summarize
+          prerun: |
+            cd $env:TEMP
+            npm init -y
+            npm install dashcam-chrome
+            Start-Process "C:/Program Files/Google/Chrome/Application/chrome.exe" -ArgumentList "--start-maximized", "--load-extension=$(pwd)/node_modules/dashcam-chrome/build", "${{ inputs.website-url }}"
+            exit
+          create-pr: true
+          pr-base: ${{ steps.extract_branch.outputs.branch }}
+          pr-title: "TestDriver.ai / Generate Test Plans"
+          pr-branch: ${{ steps.create-pr-branch.outputs.pr-branch }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORCE_COLOR: "3"

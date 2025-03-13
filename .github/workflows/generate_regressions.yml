@@ -1,0 +1,96 @@
+name: TestDriver.ai / Generate / Regressions
+
+permissions:
+  actions: read
+  contents: write
+  statuses: write
+  pull-requests: write
+
+on:
+  workflow_call:
+    inputs:
+      website-url:
+        type: string
+        required: true
+        description: The URL of the website to test
+      base-branch:
+        type: string
+        required: true
+        description: The branch name of the pull request
+    secrets:
+      key:
+        required: true
+        description: The TestDriver API key
+      GH_TOKEN:
+        required: true
+        description: The GitHub token
+
+jobs:
+  gather-markdown-files:
+    name: Setup Test Matrix (./testdriver/generate/*.md)
+    runs-on: ubuntu-latest
+    outputs:
+      markdown_files: ${{ steps.markdown_list.outputs.files }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.base-branch }}
+
+      - name: Find all markdown files and extract filenames
+        id: markdown_list
+        run: |
+          FILES=$(ls ./testdriver/generate/*.md)
+          FILENAMES=$(basename -a $FILES | sed 's/\.md$//')
+          FILES_JSON=$(echo "$FILENAMES" | jq -R -s -c 'split("\n")[:-1]')
+          echo "::set-output name=files::$FILES_JSON"
+
+  test:
+    name: Run Regressions - ${{ matrix.markdown }}
+    needs: gather-markdown-files
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        markdown: ${{ fromJson(needs.gather-markdown-files.outputs.markdown_files) }}
+      fail-fast: false
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.base-branch }}
+
+      - name: Display filename being tested
+        run: |
+          echo "Running job for file: ${{ matrix.markdown }}.md"
+
+      - name: Read file content into environment variable
+        id: read_file
+        run: |
+          CONTENT=$(cat ./testdriver/generate/${{ matrix.markdown }}.md)
+          echo "MARKDOWN_CONTENT<<EOF" >> $GITHUB_ENV
+          echo "$CONTENT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+      - name: Extract current branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      - uses: testdriverai/action@main
+        with:
+          key: ${{ secrets.key }}
+          prompt: |
+            ${{ env.MARKDOWN_CONTENT }}  # Use the content of the file from the environment
+            1. /summarize
+          prerun: |
+            cd $env:TEMP
+            npm init -y
+            npm install dashcam-chrome
+            Start-Process "C:/Program Files/Google/Chrome/Application/chrome.exe" -ArgumentList "--start-maximized", "--load-extension=$(pwd)/node_modules/dashcam-chrome/build", "${{ vars.TESTDRIVER_WEBSITE }}"
+            exit
+          create-pr: true
+          pr-base: ${{ inputs.base-branch }}
+          pr-title: "TestDriver.ai / Generate Test / ${{ matrix.markdown }}"
+          pr-branch: testdriver/regression-${{ matrix.markdown }}-${{ github.run_id }}-${{ github.run_attempt }}
+          pr-test-filename: ${{matrix.markdown}}.yml
+        env:
+          FORCE_COLOR: "3"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
