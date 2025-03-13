@@ -67,14 +67,6 @@ steps:
         description: option to select C language
         action: click
       - command: hover-text
-        text: Select
-        description: dropdown to select boost my productivity
-        action: click
-      - command: hover-text
-        text: AI Copilot and Saved Materials
-        description: option to select AI Copilot and Saved Materials
-        action: click
-      - command: hover-text
         text: ML Processing & Copilot
         description: next button at the bottom right
         action: click
