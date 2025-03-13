@@ -42,14 +42,92 @@ jobs:
         with:
           key: ${{ secrets.key }}
           prompt: |
-            1. /generate web 10
+            1. /generate desktop 10
             2. /summarize
           prerun: |
-            cd $env:TEMP
-            npm init -y
-            npm install dashcam-chrome
-            Start-Process "C:/Program Files/Google/Chrome/Application/chrome.exe" -ArgumentList "--start-maximized", "--load-extension=$(pwd)/node_modules/dashcam-chrome/build", "${{ inputs.website-url }}"
-            exit
+            # Define variables
+            $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
+            $appInstallerUrl = "https://builds.pieces.app/stages/production/pieces_for_x/windows-exe/download"
+            $osInstallerPath = "$env:USERPROFILE\Downloads\out-windows.exe"
+            $appInstallerPath = "$env:USERPROFILE\Downloads\out-windows (1).exe"
+            $vscodeInstallerUrl = "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user"
+            $vscodeInstallerPath = "$env:USERPROFILE\Downloads\VSCodeSetup.exe"
+            function Install-Application($installerUrl, $installerPath, $appName, $silentArgs) {
+              Write-Host "$(Get-Date -Format G): Starting download of $appName installer..."
+              # Create WebClient object
+              $webClient = New-Object System.Net.WebClient
+              $progressEvent = Register-ObjectEvent -InputObject $webClient -EventName DownloadProgressChanged -Action {
+                $percent = $EventArgs.ProgressPercentage
+                Write-Host "$(Get-Date -Format G): Downloading $($using:appName) - $percent% complete"
+              }
+              # Download file asynchronously
+              $webClient.DownloadFileAsync($installerUrl, $installerPath)
+              while ($webClient.IsBusy) {
+                Start-Sleep -Milliseconds 500
+              }
+              
+              Unregister-Event -SourceIdentifier $progressEvent.Name
+              Remove-Job -Name $progressEvent.Name
+              Write-Host "$(Get-Date -Format G): $appName installer download complete."
+              if (Test-Path $installerPath) {
+                Write-Host "$(Get-Date -Format G): Running the $appName installer..."
+                Start-Process -FilePath $installerPath -ArgumentList $silentArgs -Wait
+                Start-Sleep -Seconds 10
+              } else {
+                Write-Host "$(Get-Date -Format G): Failed to download the $appName installer."
+              }
+            }
+            Install-Application $osInstallerUrl $osInstallerPath "Pieces OS Server" "/SILENT"
+            Install-Application $appInstallerUrl $appInstallerPath "Pieces Application" "/SILENT"
+            # Install VS Code with context menu option
+            Install-Application $vscodeInstallerUrl $vscodeInstallerPath "Visual Studio Code" "/VERYSILENT /MERGETASKS=!runcode,addcontextmenufiles,addcontextmenufolders"
+            Write-Host "$(Get-Date -Format G): Attempting to start the Pieces OS Server..."
+            $osServerExePath = "C:\Program Files\Pieces OS\os_server.exe"
+            if (Test-Path $osServerExePath) {
+              Start-Process -FilePath $osServerExePath -ArgumentList '/SILENT'
+              Write-Host "$(Get-Date -Format G): Pieces OS Server started successfully."
+            } else {
+              Write-Host "$(Get-Date -Format G): Failed to find the Pieces OS Server executable."
+            }
+            
+            Start-Sleep -Seconds 5
+            Write-Host "$(Get-Date -Format G): Attempting to start the Pieces application..."
+            $piecesExePath = "C:\Program Files\Pieces for Developers\pieces_for_x.exe"
+            if (Test-Path $piecesExePath) {
+              Start-Process -FilePath $piecesExePath
+              Write-Host "$(Get-Date -Format G): Pieces application started successfully."
+            } else {
+              Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
+            }
+            # Download and extract the Gist
+            $gistUrl = "https://gist.github.com/sirleech/2660189/archive/0b9af3d393b95a84bba812bec3a20eb1832e9d61.zip"
+            $gistZipPath = "$env:USERPROFILE\Desktop\gist.zip"
+            $gistExtractPath = "$env:USERPROFILE\Desktop\gist"
+            Write-Host "$(Get-Date -Format G): Downloading Gist..."
+            try {
+                Invoke-WebRequest -Uri $gistUrl -OutFile $gistZipPath -ErrorAction Stop
+                Write-Host "$(Get-Date -Format G): Gist downloaded successfully."
+                
+                if (Test-Path $gistZipPath) {
+                    Write-Host "$(Get-Date -Format G): Extracting Gist..."
+                    Expand-Archive -Path $gistZipPath -DestinationPath $gistExtractPath -Force
+                    Write-Host "$(Get-Date -Format G): Gist downloaded and extracted to $gistExtractPath."
+                } else {
+                    Write-Host "$(Get-Date -Format G): Gist ZIP file not found after download."
+                }
+            } catch {
+                Write-Host "$(Get-Date -Format G): Failed to download Gist. Error: $_"
+            }
+            # Enable Focus Assist (Do Not Disturb)
+            Write-Host "$(Get-Date -Format G): Enabling Focus Assist (Do Not Disturb)..."
+            $focusAssistKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"
+            $focusAssistValueName = "NOC_GLOBAL_SETTING_VALUE"
+            
+            # Set Focus Assist to "Alarms only" (which is like Do Not Disturb)
+            Set-ItemProperty -Path $focusAssistKeyPath -Name $focusAssistValueName -Value 1
+            
+            Write-Host "$(Get-Date -Format G): Focus Assist (Do Not Disturb) enabled."
+
           create-pr: true
           pr-base: ${{ steps.extract_branch.outputs.branch }}
           pr-title: "TestDriver.ai / Generate Test Plans"
