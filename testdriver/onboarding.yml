@@ -82,14 +82,14 @@ steps:
         action: click
   - prompt: >-
       in the dropdown menu where it currently says GPT-4o mini, and click it and
-      choose Gemini 2 Flash instead, then click Activate, then next
+      choose Gemini Pro Chat instead, then click Activate, then next
     commands:
       - command: hover-text
         text: GPT-4o Mini
         description: dropdown menu for setting default LLM
         action: click
       - command: hover-text
-        text: Gemini 2 Flash
+        text: Gemini Pro Chat
         description: option in the dropdown menu to set LLM to Gemini 2 Flash
         action: click
       - command: hover-text
