@@ -7,11 +7,8 @@ steps:
         text: LTM Context
         description: LTM Context button in Pieces application
         action: click
-  - prompt: click the circle above the highlighted LTM Context text
-    commands:
-      - command: hover-image
-        description: circle icon above the LTM Context text in Pieces application
-        action: click
+      - command: wait
+        timeout: 2000
   - prompt: click I'm In
     commands:
       - command: hover-text
@@ -57,12 +54,12 @@ steps:
       - command: press-keys
         keys: [command, w]
   - prompt: >-
-      focus pieces, click into the pieces chatbox that says Paste code, paste, and click enter to send
+      focus pieces, click into the pieces chatbox that says Ask anything ...
     commands:
       - command: focus-application
         name: Pieces for Developers
       - command: hover-text
-        text: Paste code, drag and drop an image, or ask a technical question...
+        text: Ask anything ...
         description: chatbox in Pieces for Developers
         action: click
       - command: press-keys

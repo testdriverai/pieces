@@ -4,22 +4,31 @@ steps:
     commands:
       - command: focus-application
         name: Pieces for Developers
+      - command: if
+        condition: a software update dialog shows
+        then:
+          - command: wait-for-text
+            text: Close
+          - command: hover-text
+            text: Close
+            description: software update dialog cancellation button
+            action: click
   - prompt: >-
-      click on "light theme" and check if the theme changes to light, if it does
-      click on "dark theme" and check if the theme changes back to light
+      click on "dark theme" and check if the theme changes to dark
+      click on "light theme" and check if the theme changes to light
     commands:
-      - command: hover-text
-        text: Light Theme
-        description: theme toggle option
-        action: click
-      - command: assert
-        expect: the theme is light
       - command: hover-text
         text: Dark Theme
         description: theme toggle option
         action: click
       - command: assert
         expect: the theme is dark
+      - command: hover-text
+        text: Light Theme
+        description: theme toggle option
+        action: click
+      - command: assert
+        expect: the theme is light
   - prompt: click on get started
     commands:
       - command: hover-text
@@ -30,9 +39,8 @@ steps:
       so here the sentences have a placeholder called "Select"which can be changed by clicking on it, click on "select" and choose student,
       similarliy click on "Select" years of experience and select less than 1, click on "Select" projects and select mobile, click somewhere outside the drop-window to close it, click on I mostly code in "Select" and select c, click I want to boost my productivity "Select" and select AI Copilot and Saved Materials, finally click on next button at the bottom right
     commands:
-      - command: hover-text
-        text: Select
-        description: first dropdown near "I am a"
+      - command: match-image
+        path: student.png
         action: click
       - command: hover-text
         text: Student
