@@ -20,6 +20,12 @@ steps:
         action: click
       - command: assert
         expect: the theme is dark
+  - prompt: click close on software update dialog
+    commands:
+      - command: hover-text
+        text: Close
+        description: close button on software update dialog
+        action: click
   - prompt: click on get started
     commands:
       - command: hover-text
