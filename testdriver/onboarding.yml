@@ -70,17 +70,27 @@ steps:
         text: ML Processing & Copilot
         description: next button at the bottom right
         action: click
-  - prompt: >-
-      click on "Select" and select high, click on the drop down for select model,
-      scroll to the bottom, click on Turn on and click on next
+  - prompt: click the dropdown menu currently labeled medium and choose high instead
     commands:
       - command: hover-text
         text: Medium
-        description: dropdown to select enrichment level
+        description: dropdown menu for material enrichment level
         action: click
       - command: hover-text
         text: High
-        description: option to select high enrichment level
+        description: option in the dropdown menu to set enrichment level to high
+        action: click
+  - prompt: >-
+      in the dropdown menu where it currently says GPT-4o mini, and click it and
+      choose Gemini 2 Flash instead, then click Activate, then next
+    commands:
+      - command: hover-text
+        text: GPT-4o Mini
+        description: dropdown menu for setting default LLM
+        action: click
+      - command: hover-text
+        text: Gemini 2 Flash
+        description: option in the dropdown menu to set LLM to Gemini 2 Flash
         action: click
       - command: hover-text
         text: Activate
