@@ -26,23 +26,11 @@ steps:
         text: Close
         description: close button on the software update dialog
         action: click
-  - prompt: open the gist folder on the desktop
-    commands:
-      - command: hover-text
-        text: gist
-        description: folder on the desktop
-        action: double-click
-  - prompt: open the folder within the gist folder
-    commands:
-      - command: hover-text
-        text: 266
-        description: folder in explorer
-        action: double-click
-  - prompt: open the python file from the folder in vs code
+  - prompt: open the python file from the desktop in vs code
     commands:
       - command: hover-text
         text: gistfile1.py
-        description: Python file in the gist folder
+        description: Python file on the desktop
         action: right-click
       - command: hover-text
         text: Open with Code

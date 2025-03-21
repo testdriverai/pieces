@@ -25,12 +25,15 @@ jobs:
             3. /run testdriver/ltm_test.yml
             4. /run testdriver/vsc_test.yml
           prerun: |
-            # Define variables
-            $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
-            $appInstallerUrl = "https://builds.pieces.app/stages/production/pieces_for_x/windows-exe/download"
+            # Define URL variables
+            $osInstallerUrl = ${{ env.OS_INSTALLER_URL }}
+            $appInstallerUrl = ${{ env.APP_INSTALLER_URL }}
+            $vscodeInstallerUrl = ${{ env.VSC_INSTALLER_URL }}
+            $gistUrl = ${{ env.GIST_URL }}
+
+            # Download and install Pieces
             $osInstallerPath = "$env:USERPROFILE\Downloads\out-windows.exe"
             $appInstallerPath = "$env:USERPROFILE\Downloads\out-windows (1).exe"
-            $vscodeInstallerUrl = "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user"
             $vscodeInstallerPath = "$env:USERPROFILE\Downloads\VSCodeSetup.exe"
             function Install-Application($installerUrl, $installerPath, $appName, $silentArgs) {
               Write-Host "$(Get-Date -Format G): Starting download of $appName installer..."
@@ -79,10 +82,12 @@ jobs:
             } else {
               Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
             }
-            # Download and extract the Gist
-            $gistUrl = "https://gist.github.com/sirleech/2660189/archive/0b9af3d393b95a84bba812bec3a20eb1832e9d61.zip"
+
+            # Download and extract the Gist for VSC test to Desktop
             $gistZipPath = "$env:USERPROFILE\Desktop\gist.zip"
             $gistExtractPath = "$env:USERPROFILE\Desktop\gist"
+            $pythonFilePath = "$env:USERPROFILE\Desktop\"
+
             Write-Host "$(Get-Date -Format G): Downloading Gist..."
             try {
                 Invoke-WebRequest -Uri $gistUrl -OutFile $gistZipPath -ErrorAction Stop
@@ -91,23 +96,32 @@ jobs:
                 if (Test-Path $gistZipPath) {
                     Write-Host "$(Get-Date -Format G): Extracting Gist..."
                     Expand-Archive -Path $gistZipPath -DestinationPath $gistExtractPath -Force
-                    Write-Host "$(Get-Date -Format G): Gist downloaded and extracted to $gistExtractPath."
+                    
+                    # Find the .py file in the extracted folder
+                    $pythonFile = Get-ChildItem -Path $gistExtractPath -Filter *.py -Recurse | Select-Object -First 1
+                    
+                    if ($pythonFile) {
+                        # Move the .py file to the desktop
+                        Move-Item -Path $pythonFile.FullName -Destination $pythonFilePath -Force
+                        Write-Host "$(Get-Date -Format G): Python file extracted to desktop."
+                    } else {
+                        Write-Host "$(Get-Date -Format G): No Python file found in the Gist."
+                    }
+                    
+                    # Clean up the extracted folder
+                    Remove-Item -Path $gistExtractPath -Recurse -Force
+                    Write-Host "$(Get-Date -Format G): Cleaned up extracted folder."
                 } else {
                     Write-Host "$(Get-Date -Format G): Gist ZIP file not found after download."
                 }
             } catch {
                 Write-Host "$(Get-Date -Format G): Failed to download Gist. Error: $_"
             }
-            # Enable Focus Assist (Do Not Disturb)
-            Write-Host "$(Get-Date -Format G): Enabling Focus Assist (Do Not Disturb)..."
-            $focusAssistKeyPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings"
-            $focusAssistValueName = "NOC_GLOBAL_SETTING_VALUE"
-            
-            # Set Focus Assist to "Alarms only" (which is like Do Not Disturb)
-            Set-ItemProperty -Path $focusAssistKeyPath -Name $focusAssistValueName -Value 1
-            
-            Write-Host "$(Get-Date -Format G): Focus Assist (Do Not Disturb) enabled."
-
         env:
           FORCE_COLOR: "3"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OS_INSTALLER_URL: "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
+          APP_INSTALLER_URL: "https://builds.pieces.app/stages/production/pieces_for_x/windows-exe/download"
+          VSC_INSTALLER_URL: "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user"
+          GIST_URL: "https://gist.github.com/sirleech/2660189/archive/0b9af3d393b95a84bba812bec3a20eb1832e9d61.zip"
+
