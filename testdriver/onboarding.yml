@@ -20,12 +20,10 @@ steps:
         action: click
       - command: assert
         expect: the theme is dark
-  - prompt: click close on software update dialog
+  - prompt: focus "Pieces for Developers" application
     commands:
-      - command: hover-text
-        text: Close
-        description: close button on software update dialog
-        action: click
+      - command: focus-application
+        name: Pieces for Developers
   - prompt: click on get started
     commands:
       - command: hover-text
