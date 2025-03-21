@@ -26,10 +26,10 @@ jobs:
             4. /run testdriver/vsc_test.yml
           prerun: |
             # Define URL variables using environment variables
-            $osInstallerUrl = $env:OS_INSTALLER_URL
-            $appInstallerUrl = $env:APP_INSTALLER_URL
-            $vscodeInstallerUrl = $env:VSC_INSTALLER_URL
-            $gistUrl = $env:GIST_URL
+            $osInstallerUrl = "${{ env.OS_INSTALLER_URL }}"
+            $appInstallerUrl = "${{ env.APP_INSTALLER_URL }}"
+            $vscodeInstallerUrl = "${{ env.VSC_INSTALLER_URL }}"
+            $gistUrl = "${{ env.GIST_URL }}"
 
             # Download and install Pieces
             $osInstallerPath = "$env:USERPROFILE\Downloads\out-windows.exe"
