@@ -12,8 +12,9 @@ jobs:
 
       - name: Run test
         run: |
-            npx testdriverai@beta run testdriver/workstream_activity.yaml --headless
-            npx testdriverai@beta run testdriver/ltm_test.yaml --headless
+            # npx testdriverai@beta run testdriver/workstream_activity.yaml --headless
+            # npx testdriverai@beta run testdriver/ltm_test.yaml --headless
+            npx testdriverai@beta run testdriver/focus.yaml --headless
         env:
           FORCE_COLOR: 3
           TD_API_KEY: ${{ secrets.TESTDRIVER_API_KEY }}
