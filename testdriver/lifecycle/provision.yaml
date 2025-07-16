@@ -1,0 +1,115 @@
+version: 6.0.1
+session: 67f00511acbd9ccac373edf7
+steps:
+  - prompt: install pieces
+    commands:
+      - command: exec
+        lang: pwsh
+        code: |
+            $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
+            $osInstallerPath = "$env:USERPROFILE\Downloads\out-windows.exe"
+            $appInstallerUrl = "https://builds.pieces.app/stages/staging/pieces_for_x/windows-exe/download"
+            $appInstallerPath = "$env:USERPROFILE\Downloads\pieces_for_x.exe"
+            $prodDataUrl = "https://github.com/testdriverai/assets-pieces/archive/HEAD.zip"
+            $prodDataZipPath = "$env:USERPROFILE\Downloads\assets-pieces-HEAD.zip"
+            $prodDataExtractedPath = "$env:USERPROFILE\Documents\com.pieces.os" ## rn its in C:\Users\testdriver\Documents\com.pieces.os
+
+            function Install-Application($installerUrl, $installerPath, $appName, $silentArgs) {
+              Write-Host "$(Get-Date -Format G): Starting download of $appName installer..."
+              # Create WebClient object
+              $webClient = New-Object System.Net.WebClient
+              $progressEvent = Register-ObjectEvent -InputObject $webClient -EventName DownloadProgressChanged -Action {
+                $percent = $EventArgs.ProgressPercentage
+                Write-Host "$(Get-Date -Format G): Downloading $($using:appName) - $percent% complete"
+              }
+
+              # Download file asynchronously
+              $webClient.DownloadFileAsync($installerUrl, $installerPath)
+              while ($webClient.IsBusy) {
+                Start-Sleep -Milliseconds 500
+              }
+
+              Unregister-Event -SourceIdentifier $progressEvent.Name
+              Remove-Job -Name $progressEvent.Name
+              Write-Host "$(Get-Date -Format G): $appName installer download complete."
+              if (Test-Path $installerPath) {
+                Write-Host "$(Get-Date -Format G): Running the $appName installer..."
+                Start-Process -FilePath $installerPath -ArgumentList $silentArgs -Wait
+                Start-Sleep -Seconds 10
+              } else {
+                Write-Host "$(Get-Date -Format G): Failed to download the $appName installer."
+              }
+            }
+
+            # Download and install PiecesOS (prod)
+            Install-Application $osInstallerUrl $osInstallerPath "Pieces OS Server" "/SILENT"
+
+            # Download and install PFD using latest staging
+            Install-Application $appInstallerUrl $appInstallerPath "Pieces Desktop" "/SILENT"
+
+
+            Start-Sleep -Seconds 2
+
+            # Download prod data zip file, extract it and replace the existing production folder
+            try {
+              Write-Host "$(Get-Date -Format G): Downloading Production Data..."
+              Invoke-WebRequest -Uri $prodDataUrl -OutFile $prodDataZipPath -ErrorAction Stop
+              
+              $prodDataPath = "$prodDataExtractedPath\production"
+              # Delete the existing production folder
+              try {
+                Write-Host "$(Get-Date -Format G): Deleting existing production folder..."
+                if (Test-Path $prodDataPath) {
+                    Remove-Item -Recurse -Force $prodDataPath
+                }
+              } catch {
+                Write-Host "$(Get-Date -Format G): Failed to delete the existing production folder."
+              }
+
+              Expand-Archive -Path $prodDataZipPath -DestinationPath $prodDataExtractedPath -Force
+
+              # Find the extracted folder (should be only one directory inside $prodDataExtractedPath as we deleted the existing production folder)
+              $extractedFolders = Get-ChildItem -Path $prodDataExtractedPath -Directory
+              if ($extractedFolders.Count -eq 1) {
+                  $innerProductionPath = Join-Path $extractedFolders[0].FullName 'production'
+                  if (Test-Path $innerProductionPath) {
+                      Move-Item -Path $innerProductionPath -Destination $prodDataExtractedPath
+                      Remove-Item -Recurse -Force $extractedFolders[0].FullName
+                      Write-Host "Added testing production data to $prodDataExtractedPath"
+                  } else {
+                      Write-Host "Production folder not found in extracted content."
+                  }
+              } else {
+                  Write-Host "Unexpected folder structure after extraction."
+              }
+
+              # Delete the prod data zip file
+              Remove-Item $prodDataZipPath -Recurse -Force
+            } catch {
+              Write-Host "$(Get-Date -Format G): Failed to download Production Data."
+            }
+
+            Write-Host "$(Get-Date -Format G): Attempting to start the Pieces OS Server..."
+            $osServerExePath = "C:\Program Files\Pieces OS\os_server.exe"
+
+            if (Test-Path $osServerExePath) {
+              Start-Process -FilePath $osServerExePath -ArgumentList '/SILENT'
+              Write-Host "$(Get-Date -Format G): Pieces OS Server started successfully."
+            } else {
+              Write-Host "$(Get-Date -Format G): Failed to find the Pieces OS Server executable."
+            }
+
+            Start-Sleep -Seconds 5
+
+            Write-Host "$(Get-Date -Format G): Attempting to start the Pieces application..."
+            $piecesExePath = "C:\Program Files\Pieces for Developers\pieces_for_x.exe"
+
+            if (Test-Path $piecesExePath) {
+              Start-Process -FilePath $piecesExePath
+              Write-Host "$(Get-Date -Format G): Pieces application started successfully."
+            } else {
+              Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
+            }
+      - command: wait-for-text
+        text: Pieces
+        timeout: 60000

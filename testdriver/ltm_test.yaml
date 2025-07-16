@@ -1,0 +1,59 @@
+version: 5.7.51
+session: 67b0fa8fdcf227a33f2394a5
+steps:
+  - prompt: open chrome
+    commands:
+      - command: hover-image
+        description: Google Chrome icon on the taskbar
+        action: click
+  - prompt: search google in chrome for 5 * 5
+    commands:
+      - command: focus-application
+        name: Google Chrome
+      - command: hover-text
+        text: Search Google or type a URL
+        description: main google search
+        action: click
+      - command: type
+        text: 5 * 5
+      - command: press-keys
+        keys:
+          - enter
+  - prompt: wait 5 seconds
+    commands:
+      - command: wait
+        timeout: 5000
+  - prompt: focus pieces
+    commands:
+      - command: focus-application
+        name: Pieces
+  - prompt: Click new chat in Pieces
+    commands:
+      - command: hover-text
+        text: New chat
+        description: button to start a new chat in Pieces
+        action: click
+  - prompt: >-
+      chat in pieces and ask, what was my last search in Chrome?
+    commands:
+      - command: hover-text
+        text: Ask anything...
+        description: chat input field in Pieces
+        action: click
+      - command: type
+        text: What was my last search in chrome?
+  - prompt: Click the send message button in pieces
+    commands:
+      - command: hover-image
+        description: send message button in Pieces chat (blue send button the right of chat)
+        action: click
+  - prompt: wait 15 seconds
+    commands:
+      - command: wait
+        timeout: 15000
+  - prompt: >-
+      assert that the response in Pieces says something about the search being 5
+      * 5
+    commands:
+      - command: assert
+        expect: the last search was for "5 * 5"

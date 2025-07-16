@@ -1,0 +1,60 @@
+version: 5.7.61
+steps:
+  - prompt: Open Workstream Activities
+    commands:
+      - command: focus-application
+        name: Pieces for Developers
+      - command: if
+        condition: a software update dialog shows
+        then:
+          - command: wait-for-text
+            text: Close
+            timeout: 10000
+          - command: hover-text
+            text: Close
+            description: software update dialog cancellation button
+            action: click
+      - command: wait
+        timeout: 1000
+      - command: press-keys
+        keys: 
+          - ctrl
+          - enter
+      - command: type
+        text: Workstream Activity
+      - command: hover-text
+        text: Go to Workstream 
+        description: A button in the power menu named 'Go to Workstream'
+        action: click
+  - prompt: Generate a new Workstream Activity
+    commands:
+      - command: if
+        condition: If there is Long-Term memory Activate button in the middle of the screen
+        then:
+          - command: hover-text
+            text: Activate
+            description: Activate button with a power icon to activate the Long-Term memory
+      - command: if
+        condition: If there is a Generate Workstream Activity button in the middle of the screen
+        then:
+          - command: hover-text
+            text: Generate
+            description: Generate button with a plus icon to generate a new workstream activity
+        else:
+          - command: hover-image
+            description: Small "+" Icon to add a new summary
+            action: click
+          - command: hover-text
+            text: Today
+            description: A menu contains the word "Today" where you can check it
+            action: click
+          - command: hover-image
+            description: a check icon in green besides the cross icon at the button to confirm the action
+            action: click
+      - command: wait
+        timeout: 7000
+  - prompt: Assert that a summary of all you did (Generating a secret message) exists
+    commands:
+      - command: assert
+        expect: A summary of all you did, You generated a secret message from Pieces for Developers
+
