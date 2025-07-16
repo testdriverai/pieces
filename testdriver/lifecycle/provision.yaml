@@ -110,6 +110,6 @@ steps:
             } else {
               Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
             }
-      - command: wait-for-text
-        text: Pieces
-        timeout: 60000
+      # - command: wait-for-text
+      #   text: Pieces
+      #   timeout: 60000
