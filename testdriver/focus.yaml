@@ -1,0 +1,16 @@
+version: 6.0.1
+steps:
+  - prompt: focus "Pieces for Developers" application and close the software update dialog
+    commands:
+      - command: focus-application
+        name: Pieces for Developers
+      - command: if
+        condition: a software update dialog shows
+        then:
+          - command: wait-for-text
+            text: Close
+            timeout: 10000
+          - command: hover-text
+            text: Close
+            description: software update dialog cancellation button
+            action: click
