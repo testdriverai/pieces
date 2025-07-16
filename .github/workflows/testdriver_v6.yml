@@ -1,0 +1,20 @@
+name: TestDriver v6
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo to acess the test files
+        uses: actions/checkout@v4
+
+      - name: Run test
+        run: |
+            npx testdriverai@beta run testdriver/workstream_activity.yaml --headless
+            npx testdriverai@beta run testdriver/ltm_test.yaml --headless
+        env:
+          FORCE_COLOR: 3
+          TD_API_KEY: ${{ secrets.TESTDRIVER_API_KEY }}
+          TD_THIS_FILE: workstream activity + ltm
