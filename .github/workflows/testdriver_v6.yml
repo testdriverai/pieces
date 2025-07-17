@@ -1,6 +1,9 @@
 name: TestDriver v6
 
 on:
+  push:
+    branches:
+        - main
   workflow_dispatch:
 
 jobs:
