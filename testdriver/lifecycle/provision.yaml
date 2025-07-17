@@ -12,7 +12,7 @@ steps:
             $appInstallerPath = "$env:USERPROFILE\Downloads\pieces_for_x.exe"
             $prodDataUrl = "https://github.com/testdriverai/assets-pieces/archive/HEAD.zip"
             $prodDataZipPath = "$env:USERPROFILE\Downloads\assets-pieces-HEAD.zip"
-            $prodDataExtractedPath = "$env:USERPROFILE\Documents\com.pieces.os" ## rn its in C:\Users\testdriver\Documents\com.pieces.os
+            $prodDataExtractedPath = "$env:USERPROFILE\AppData\Local\Mesh Intelligent Technologies, Inc\Pieces OS\com.pieces.os" # the path where the data resides
 
             function Install-Application($installerUrl, $installerPath, $appName, $silentArgs) {
               Write-Host "$(Get-Date -Format G): Starting download of $appName installer..."
