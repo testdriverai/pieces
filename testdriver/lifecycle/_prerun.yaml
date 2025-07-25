@@ -1,0 +1,108 @@
+version: 4.2.18
+session: aaa111
+steps:
+  - prompt: "Provision"
+    commands:
+      - command: exec
+        lang: pwsh
+        code: |
+          dashcam track --name="Perf - Pieces OS" --type="application" --pattern="C:\testdriver\os_server.csv"
+          dashcam track --name="Perf - Pieces For X" --type="application" --pattern="C:\testdriver\pieces_for_x.csv"
+      - command: exec
+        lang: pwsh
+        code: |
+          # ------------------------
+          # Create performance monitoring script
+          # ------------------------
+          
+          $baseLogDir = "C:\testdriver"
+          $monitoringScriptPath = Join-Path $baseLogDir "performance_monitor.ps1"
+          
+          # Create log directory if it doesn't exist
+          Write-Host "Creating log directory: $baseLogDir"
+          if (!(Test-Path $baseLogDir)) {
+              New-Item -ItemType Directory -Path $baseLogDir -Force | Out-Null
+              Write-Host "Created directory: $baseLogDir"
+          } else {
+              Write-Host "Directory already exists: $baseLogDir"
+          }
+
+          # Create the monitoring script content
+          $monitoringScript = @"
+          # Performance monitoring script
+          `$processesToWatch = @(
+              "pieces_for_x",
+              "os_server"
+          )
+
+          `$baseLogDir = "C:\testdriver"
+
+          # Initialize log files
+          `$logFiles = @{}
+          foreach (`$procName in `$processesToWatch) {
+              `$logFile = Join-Path `$baseLogDir "`$procName.csv"
+              `$logFiles[`$procName] = `$logFile
+              Write-Host "Creating CSV file: `$logFile"
+              "Timestamp,CPU_Time (s),PrivateMemory (MB),WorkingSet (MB)" | Out-File -FilePath `$logFile -Encoding utf8 -Force
+              Write-Host "Created CSV file: `$logFile"
+              
+              # Add a test entry to verify file creation
+              `$testTimestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+              "`$testTimestamp,0.00,0.00,0.00" | Out-File -FilePath `$logFile -Append -Encoding utf8
+              Write-Host "Added test entry to: `$logFile"
+          }
+
+          # Monitoring loop
+          Write-Host "Starting monitoring loop..."
+          `$loopCount = 0
+          while (`$true) {
+              `$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+              `$anyRunning = `$false
+              `$loopCount++
+              
+              Write-Host "Loop `$loopCount - Checking processes at `$timestamp"
+
+              foreach (`$procName in `$processesToWatch) {
+                  `$procs = Get-Process -Name `$procName -ErrorAction SilentlyContinue
+
+                  if (`$procs) {
+                      `$anyRunning = `$true
+                      Write-Host "Found `$(`$procs.Count) instance(s) of `$procName"
+                      foreach (`$p in `$procs) {
+                          `$cpu = "{0:N2}" -f `$p.CPU
+                          `$mem = "{0:N2}" -f (`$p.PrivateMemorySize64 / 1MB)
+                          `$ws = "{0:N2}" -f (`$p.WorkingSet64 / 1MB)
+                          `$logEntry = "`$timestamp,`$cpu,`$mem,`$ws"
+                          `$logEntry | Out-File -FilePath `$logFiles[`$procName] -Append -Encoding utf8
+                          Write-Host "Logged: `$logEntry to `$(`$logFiles[`$procName])"
+                      }
+                  } else {
+                      Write-Host "No processes found for: `$procName"
+                  }
+              }
+
+              if (-not `$anyRunning) {
+                  Write-Host "No target processes running, stopping monitoring after `$loopCount loops"
+                  break
+              }
+              
+              # Add a maximum loop limit for testing
+              if (`$loopCount -gt 60) {  # Run for max 5 minutes (60 * 5 seconds)
+                  Write-Host "Reached maximum loop limit, stopping monitoring"
+                  break
+              }
+
+              Start-Sleep -Seconds 5
+          }
+          "@
+
+                    # Write the monitoring script to file
+                    Write-Host "Writing monitoring script to: $monitoringScriptPath"
+                    $monitoringScript | Out-File -FilePath $monitoringScriptPath -Encoding utf8 -Force
+                    Write-Host "Created monitoring script: $monitoringScriptPath"
+                    
+                    # Start the monitoring script in the background
+                    Write-Host "Starting performance monitoring script in background..."
+                    Start-Process powershell -ArgumentList "-NoProfile", "-ExecutionPolicy Bypass", "-File `"$monitoringScriptPath`"" -WindowStyle Hidden
+                - command: wait
+                  timeout: 300000

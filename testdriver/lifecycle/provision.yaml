@@ -5,15 +5,18 @@ steps:
     commands:
       - command: exec
         lang: pwsh
+        timeout: 300000
         code: |
+            # Set up installer URLs and paths
             $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
             $osInstallerPath = "$env:USERPROFILE\Downloads\out-windows.exe"
             $appInstallerUrl = "https://builds.pieces.app/stages/staging/pieces_for_x/windows-exe/download"
             $appInstallerPath = "$env:USERPROFILE\Downloads\pieces_for_x.exe"
             $prodDataUrl = "https://github.com/testdriverai/assets-pieces/archive/HEAD.zip"
             $prodDataZipPath = "$env:USERPROFILE\Downloads\assets-pieces-HEAD.zip"
-            $prodDataExtractedPath = "$env:USERPROFILE\AppData\Local\Mesh Intelligent Technologies, Inc\Pieces OS\com.pieces.os" # the path where the data resides
+            $prodDataExtractedPath = "$env:USERPROFILE\AppData\Local\Mesh Intelligent Technologies, Inc\Pieces OS\com.pieces.os"
 
+            # Define reusable function for installing applications
             function Install-Application($installerUrl, $installerPath, $appName, $silentArgs) {
               Write-Host "$(Get-Date -Format G): Starting download of $appName installer..."
               # Create WebClient object
@@ -41,16 +44,93 @@ steps:
               }
             }
 
-            # Download and install PiecesOS (prod)
+      - command: exec
+        lang: pwsh
+        timeout: 300000
+        code: |
+            # Re-define variables and function for this command block
+            $osInstallerUrl = "https://builds.pieces.app/stages/production/os_server/windows-exe/download"
+            $osInstallerPath = "$env:USERPROFILE\Downloads\out-windows.exe"
+            
+            function Install-Application($installerUrl, $installerPath, $appName, $silentArgs) {
+              Write-Host "$(Get-Date -Format G): Starting download of $appName installer..."
+              # Create WebClient object
+              $webClient = New-Object System.Net.WebClient
+              $progressEvent = Register-ObjectEvent -InputObject $webClient -EventName DownloadProgressChanged -Action {
+                $percent = $EventArgs.ProgressPercentage
+                Write-Host "$(Get-Date -Format G): Downloading $($using:appName) - $percent% complete"
+              }
+
+              # Download file asynchronously
+              $webClient.DownloadFileAsync($installerUrl, $installerPath)
+              while ($webClient.IsBusy) {
+                Start-Sleep -Milliseconds 500
+              }
+
+              Unregister-Event -SourceIdentifier $progressEvent.Name
+              Remove-Job -Name $progressEvent.Name
+              Write-Host "$(Get-Date -Format G): $appName installer download complete."
+              if (Test-Path $installerPath) {
+                Write-Host "$(Get-Date -Format G): Running the $appName installer..."
+                Start-Process -FilePath $installerPath -ArgumentList $silentArgs -Wait
+                Start-Sleep -Seconds 10
+              } else {
+                Write-Host "$(Get-Date -Format G): Failed to download the $appName installer."
+              }
+            }
+            
+            # Download and install Pieces OS Server (production)
             Install-Application $osInstallerUrl $osInstallerPath "Pieces OS Server" "/SILENT"
 
-            # Download and install PFD using latest staging
+      - command: exec
+        lang: pwsh
+        timeout: 300000
+        code: |
+            # Re-define variables and function for this command block
+            $appInstallerUrl = "https://builds.pieces.app/stages/staging/pieces_for_x/windows-exe/download"
+            $appInstallerPath = "$env:USERPROFILE\Downloads\pieces_for_x.exe"
+            
+            function Install-Application($installerUrl, $installerPath, $appName, $silentArgs) {
+              Write-Host "$(Get-Date -Format G): Starting download of $appName installer..."
+              # Create WebClient object
+              $webClient = New-Object System.Net.WebClient
+              $progressEvent = Register-ObjectEvent -InputObject $webClient -EventName DownloadProgressChanged -Action {
+                $percent = $EventArgs.ProgressPercentage
+                Write-Host "$(Get-Date -Format G): Downloading $($using:appName) - $percent% complete"
+              }
+
+              # Download file asynchronously
+              $webClient.DownloadFileAsync($installerUrl, $installerPath)
+              while ($webClient.IsBusy) {
+                Start-Sleep -Milliseconds 500
+              }
+
+              Unregister-Event -SourceIdentifier $progressEvent.Name
+              Remove-Job -Name $progressEvent.Name
+              Write-Host "$(Get-Date -Format G): $appName installer download complete."
+              if (Test-Path $installerPath) {
+                Write-Host "$(Get-Date -Format G): Running the $appName installer..."
+                Start-Process -FilePath $installerPath -ArgumentList $silentArgs -Wait
+                Start-Sleep -Seconds 10
+              } else {
+                Write-Host "$(Get-Date -Format G): Failed to download the $appName installer."
+              }
+            }
+            
+            # Download and install Pieces Desktop (staging)
             Install-Application $appInstallerUrl $appInstallerPath "Pieces Desktop" "/SILENT"
 
-
+      - command: exec
+        lang: pwsh
+        code: |
+            # Re-define variables for this command block
+            $prodDataUrl = "https://github.com/testdriverai/assets-pieces/archive/HEAD.zip"
+            $prodDataZipPath = "$env:USERPROFILE\Downloads\assets-pieces-HEAD.zip"
+            $prodDataExtractedPath = "$env:USERPROFILE\AppData\Local\Mesh Intelligent Technologies, Inc\Pieces OS\com.pieces.os"
+            
+            # Download and setup production data
             Start-Sleep -Seconds 2
-
-            # Download prod data zip file, extract it and replace the existing production folder
+            
             try {
               Write-Host "$(Get-Date -Format G): Downloading Production Data..."
               Invoke-WebRequest -Uri $prodDataUrl -OutFile $prodDataZipPath -ErrorAction Stop
@@ -68,7 +148,7 @@ steps:
 
               Expand-Archive -Path $prodDataZipPath -DestinationPath $prodDataExtractedPath -Force
 
-              # Find the extracted folder (should be only one directory inside $prodDataExtractedPath as we deleted the existing production folder)
+              # Find the extracted folder and move production data
               $extractedFolders = Get-ChildItem -Path $prodDataExtractedPath -Directory
               if ($extractedFolders.Count -eq 1) {
                   $innerProductionPath = Join-Path $extractedFolders[0].FullName 'production'
@@ -83,12 +163,16 @@ steps:
                   Write-Host "Unexpected folder structure after extraction."
               }
 
-              # Delete the prod data zip file
+              # Clean up zip file
               Remove-Item $prodDataZipPath -Recurse -Force
             } catch {
               Write-Host "$(Get-Date -Format G): Failed to download Production Data."
             }
 
+      - command: exec
+        lang: pwsh
+        code: |
+            # Start Pieces OS Server
             Write-Host "$(Get-Date -Format G): Attempting to start the Pieces OS Server..."
             $osServerExePath = "C:\Program Files\Pieces OS\os_server.exe"
 
@@ -99,8 +183,12 @@ steps:
               Write-Host "$(Get-Date -Format G): Failed to find the Pieces OS Server executable."
             }
 
+      - command: exec
+        lang: pwsh
+        code: |
+            # Start Pieces Desktop Application
             Start-Sleep -Seconds 5
-
+            
             Write-Host "$(Get-Date -Format G): Attempting to start the Pieces application..."
             $piecesExePath = "C:\Program Files\Pieces for Developers\pieces_for_x.exe"
 
@@ -110,6 +198,7 @@ steps:
             } else {
               Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
             }
-      # - command: wait-for-text
-      #   text: Pieces
-      #   timeout: 60000
+
+      - command: wait-for-text
+        text: Pieces
+        timeout: 60000
