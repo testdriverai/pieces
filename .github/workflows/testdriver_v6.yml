@@ -18,8 +18,7 @@ jobs:
             # npx testdriverai@beta run testdriver/workstream_activity.yaml
             # npx testdriverai@beta run testdriver/ltm_test.yaml
             npx testdriverai@beta run testdriver/_focus.yaml
-            npx testdriverai@beta run testdriver/pos_1.yaml
-
+            npx testdriverai@beta run testdriver/pos_1.yaml --sandbox-instance=c5.4xlarge
         env:
           FORCE_COLOR: 3
           TD_API_KEY: ${{ secrets.TESTDRIVER_API_KEY }}
