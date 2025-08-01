@@ -5,6 +5,7 @@ steps:
     commands:
       - command: exec
         lang: pwsh
+        timeout: 300000
         code: |
             # Re-define variables and function for this command block
             $appInstallerUrl = "https://builds.pieces.app/stages/staging/pieces_for_x/windows-exe/download"
@@ -42,6 +43,7 @@ steps:
 
       - command: exec
         lang: pwsh
+        timeout: 300000
         code: |
             
             Write-Host "$(Get-Date -Format G): Attempting to start the Pieces application..."
