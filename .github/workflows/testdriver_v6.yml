@@ -15,7 +15,7 @@ jobs:
 
       - name: Run test
         run: |
-            npx testdriverai@beta run testdriver/workstream_activity.yaml --sandbox-instance=c5.4xlarge
+            npx testdriverai@beta run testdriver/workstream_activity.yaml --sandbox-instance=c5.2xlarge
         env:
           FORCE_COLOR: 3
           TD_API_KEY: ${{ secrets.TESTDRIVER_API_KEY }}
