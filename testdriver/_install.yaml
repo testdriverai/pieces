@@ -1,0 +1,62 @@
+version: 5.7.51
+steps:
+  - prompt: complete the installation of pieces and pieces os
+    commands:
+      - command: hover-text
+        text: Next
+        description: next button in the setup window
+        action: click
+      - command: hover-text
+        text: Next
+        description: next button in the setup window
+        action: click
+      - command: hover-text
+        text: Install
+        description: install button in the setup window
+        action: click
+      - command: wait-for-text
+        text: Finish
+        timeout: 10000
+      - command: hover-text
+        text: Finish
+        description: finish button in the setup window
+        action: click
+      - command: wait
+        timeout: 10000
+      - command: hover-text  # installation of PiecesOS ...
+        text: Install
+        description: install button for PiecesOS
+        action: click
+      - command: wait
+        timeout: 20000
+      - command: hover-text  # installation of PiecesOS ...
+        text: Install
+        description: install button for PiecesOS
+        action: click
+      - command: wait
+        timeout: 20000
+      - command: hover-text
+        text: Next
+        description: next button in the setup window
+        action: click
+      - command: wait
+        timeout: 2000
+      - command: hover-text
+        text: Next
+        description: next button in the setup wizard
+        action: click
+      - command: wait
+        timeout: 2000
+      - command: hover-text
+        text: Install
+        description: install button in the setup wizard
+        action: click
+      - command: wait-for-text
+        text: Finish
+        timeout: 2000
+      - command: hover-text
+        text: Finish
+        description: finish button in the setup wizard
+        action: click
+      - command: wait
+        timeout: 10000

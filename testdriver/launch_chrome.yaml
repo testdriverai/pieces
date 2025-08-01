@@ -1,0 +1,12 @@
+version: 5.7.51
+steps:
+  - prompt: Open Google Chrome from Click
+    commands:
+      - command: exec
+        lang: shell
+        windows: |
+          start chrome
+      - command: wait
+        timeout: 20000    
+      - command: assert
+        expect: Google Chrome is open

@@ -1,9 +1,7 @@
-version: 6.0.1
+version: 5.7.51
 steps:
   - prompt: focus "Pieces for Developers" application and close the software update dialog
     commands:
-      - command: focus-application
-        name: Pieces for Developers
       - command: if
         condition: a software update dialog shows
         then:
@@ -14,3 +12,9 @@ steps:
             text: Close
             description: software update dialog cancellation button
             action: click
+  - prompt: install pos via the script
+    commands:
+      - command: run
+        file: snippets/install_pos.yaml
+      - command: run
+        file: snippets/replace_prod.yaml

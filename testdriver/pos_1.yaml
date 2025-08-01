@@ -1,0 +1,37 @@
+version: 6.0.11
+steps:
+  - prompt: if there's a prompt about software update close it
+    commands:
+      - command: if
+        condition: a software update dialog shows
+        then:
+          - command: hover-text
+            text: Close
+            description: software update dialog cancellation button
+            action: click
+  - prompt: click on install
+    commands:
+      - command: focus-application
+        name: Pieces for Developers
+      - command: wait-for-text
+        text: Install
+        timeout: 30000
+      - command: hover-text
+        text: Install
+        description: install button
+        action: click
+  - prompt: wait for the installation to compelete
+    commands:
+      - command: wait-for-text
+        text: Sign in
+        timeout: 400000
+  - prompt: replace production data folder
+    commands: 
+      - command: run
+        file: snippets/replace_prod.yaml
+  - prompt: wait for pfd to load
+    commands:
+      - command: wait-for-text
+        text: pieces
+        timeout: 10000
+  

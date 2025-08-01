@@ -1,5 +1,4 @@
-version: 4.2.12
-session: 67c243ebfef1a88a7aed066d
+version: 5.7.51
 steps:
   - prompt: close the current chrome tab
     commands:
@@ -20,12 +19,15 @@ steps:
       - command: press-keys
         keys:
           - 'n'
-  - prompt: close the softare update window
+  - prompt: close the software update window if it appears
     commands:
-      - command: hover-text
-        text: Close
-        description: close button on the software update dialog
-        action: click
+      - command: if
+        condition: software update dialog is open
+        then:
+          - command: hover-text
+            text: Close
+            description: close button on the software update dialog
+            action: click
   - prompt: open the gist folder on the desktop
     commands:
       - command: hover-text
@@ -35,7 +37,7 @@ steps:
   - prompt: open the folder within the gist folder
     commands:
       - command: hover-text
-        text: 266
+        text: 2660189-0b9af3d93985a84bba812bec3a
         description: folder in explorer
         action: double-click
   - prompt: open the python file from the folder in vs code
@@ -54,16 +56,10 @@ steps:
         text: gistfile1.py
         description: tab with the Python file in VS Code
         action: click
-  - prompt: focus pieces for developers
+  - prompt: wait 5 seconds
     commands:
-      - command: hover-image
-        description: pieces application icon on the taskbar
-        action: click
-  - prompt: focus pieces for developers
-    commands:
-      - command: hover-image
-        description: pieces application icon on the taskbar
-        action: click
+      - command: wait
+        timeout: 5000
   - prompt: focus pieces and click new chat
     commands:
       - command: focus-application
@@ -72,14 +68,23 @@ steps:
         text: New Chat
         description: button to start a new chat in Pieces for Developers
         action: click
+  - prompt: if a popup appears asking if you want a tour of the app, click no
+    commands:
+      - command: if
+        condition: tour popup is open
+        then:
+          - command: hover-text
+            text: Remind me later
+            description: close button on the tour popup
+            action: click
   - prompt: >-
       ask in pieces, in the chatbox where it says paste code, What is the
       function, purpose, and language of the code I opened in vs code? then
       click enter to send
     commands:
       - command: hover-text
-        text: Paste code, drag and drop an image, or ask a technical question...
-        description: chatbox input area in Pieces for Developers
+        text: Ask anything...
+        description: ask pieces, What is the function, purpose, and language of the code I opened in vs code?
         action: click
       - command: type
         text: >-
