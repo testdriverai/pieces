@@ -88,4 +88,4 @@ steps:
 
       - command: wait-for-text
         text: Pieces
-        timeout: 60000
+        timeout: 10000
