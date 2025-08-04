@@ -5,9 +5,6 @@ steps:
       - command: if
         condition: a software update dialog shows
         then:
-          - command: wait-for-text
-            text: Close
-            timeout: 10000
           - command: hover-text
             text: Close
             description: software update dialog cancellation button

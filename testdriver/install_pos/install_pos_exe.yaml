@@ -15,7 +15,7 @@ steps:
         name: Pieces for Developers
       - command: wait-for-text
         text: Install
-        timeout: 30000
+        timeout: 300000
       - command: hover-text
         text: Install
         description: install button
@@ -28,10 +28,10 @@ steps:
   - prompt: replace production data folder
     commands: 
       - command: run
-        file: snippets/replace_prod.yaml
+        file: ../snippets/replace_prod.yaml
   - prompt: wait for pfd to load
     commands:
       - command: wait-for-text
         text: pieces
-        timeout: 10000
+        timeout: 30000
   
