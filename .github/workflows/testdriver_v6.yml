@@ -23,10 +23,12 @@ jobs:
           TD_API_KEY: ${{ secrets.TESTDRIVER_API_KEY }}
           TD_THIS_FILE: ${{ matrix.test_file }}
 
-      - name: Upload CLI logs
-        if: always()
+      - name: Set sanitized artifact name
+        run: echo "ARTIFACT_NAME=testdriverai-cli-logs-${{ github.run_id }}-${{ matrix.test_file }}" | sed 's/\//_/g' >> $GITHUB_ENV
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: testdriverai-cli-logs-${{ github.run_id }}-${{ matrix.test_file }}
+          name: ${{ env.ARTIFACT_NAME }}
           path: /tmp/testdriverai-cli-*.log
           if-no-files-found: ignore
