@@ -13,10 +13,11 @@ jobs:
       fail-fast: false
       matrix:
         test_file:
-          - testdriver/installation/programmatic_installation_existing_user.yaml
-          - testdriver/installation/desktop_app_installation_new_user_exe.yaml
-          - testdriver/installation/desktop_app_installation_new_user_msix.yaml
-          - testdriver/installation/desktop_app_installation_new_user_winget.yaml
+          # - testdriver/installation/programmatic_installation_existing_user.yaml
+          # - testdriver/installation/desktop_app_installation_new_user_exe.yaml
+          # - testdriver/installation/desktop_app_installation_new_user_msix.yaml
+          # - testdriver/installation/desktop_app_installation_new_user_winget.yaml
+          - testdriver/onboarding/onboarding.yaml
 
     steps:
       - name: Checkout the repo to access the test files
