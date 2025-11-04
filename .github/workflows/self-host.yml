@@ -22,7 +22,11 @@ jobs:
     steps:
       - name: Checkout the repo to access the test files
         uses: actions/checkout@v4
-        
+      
+      - name: Extract test file basename
+        id: test-file-name
+        run: echo "name=$(basename ${{ matrix.test_file }})" >> $GITHUB_OUTPUT
+
       - name: Setup AWS Instance
         id: aws-setup
         run: |
@@ -49,13 +53,13 @@ jobs:
         env:
           TD_API_KEY: ${{ secrets.TD_API_KEY }}
           TD_WEBSITE: https://testdriver-sandbox.vercel.app
-          TD_THIS_FILE: ${{ matrix.test_file }}
+          TD_THIS_FILE: ${{ steps.test-file-name.outputs.name }}
 
       - name: Upload TestDriver AI CLI logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: testdriverai-cli-logs-${{ matrix.test_file }}
+          name: testdriverai-cli-logs-${{ steps.test-file-name.outputs.name }}
           path: /tmp/testdriverai-cli-*.log
           if-no-files-found: warn
           retention-days: 30
@@ -64,10 +68,10 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-${{ matrix.test_file }}
+          name: test-results-${{ steps.test-file-name.outputs.name }}
           path: out.xml
           retention-days: 30
-          
+
       - name: Shutdown AWS Instance
         if: always()
         run: aws ec2 terminate-instances --region "$AWS_REGION" --instance-ids "$INSTANCE_ID"
