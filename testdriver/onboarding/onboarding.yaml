@@ -1,0 +1,410 @@
+version: 6.0.11
+steps:
+  - prompt: Download and Install Pieces OS
+    commands:
+      - command: run
+        file: ../snippets/programmatic_install_pieces_os_and_launch_both.yaml
+  - prompt: sign into the Pieces for Developers application
+    commands:
+      - command: run
+        file: sign-in.yaml
+  - prompt: 
+      Click on the "Dark Theme" button and verify that the application's appearance changes to Dark mode. 
+      Then, click on the "Light Theme" button and verify that the theme changes back appropriately.
+    commands:
+      - command: run
+        file: ../snippets/_focus.yaml
+      - command: hover-text
+        text: Dark Theme
+        description: Button located at the bottom of the application that switches the UI to Dark mode
+        action: click
+      - command: wait
+        timeout: 5000  
+      - command: assert
+        expect: The application's theme changes to Dark mode
+      - command: hover-text
+        text: Light Theme
+        description: Button located at the bottom of the application that switches the UI to Light mode
+        action: click
+      - command: wait
+        timeout: 10000         
+      - command: assert
+        expect: The application's theme changes to Light mode
+  - prompt: Proceed by clicking on 'Start forming memories' button to enable Long-Term Memory (LTM) functionality and begin forming memories.
+    commands:
+      - command: hover-text
+        text: Get Started with Workstream Activity
+        description: A header
+        action: hover
+      - command: wait
+        timeout: 1000
+      - command: hover-text
+        text: Start forming memories
+        description: Button that activates LTM so the app can begin recording user interactions
+        action: click
+      - command: wait-for-text
+        text: Got it
+        timeout: 20000
+      - command: hover-text
+        text: Got it
+        description: Confirmation button used to acknowledge memory formation initiation
+        action: click
+  - prompt: Launch Google Chrome
+    commands:
+      - command: run
+        file: ../snippets/launch_chrome.yaml
+  - prompt: Focus the active browser, open a new tab, enter a URL in the address bar, and wait for the page to load.Interact with a main section or header, then scroll down until specific content or text becomes visible.Use the sidebar or navigation links to access different sections, verifying that each loads the expected content.Click relevant headers within sections and scroll as needed to confirm that key page elements are present.
+    commands:
+      - command: focus-application
+        name: Google Chrome 
+      - command: wait
+        timeout: 4000 
+      - command: assert
+        expect: Google Chrome is currently open and active
+      - command: press-keys
+        keys:
+          - ctrlleft
+          - t 
+      - command: wait
+        timeout: 5000           
+      - command: type
+        text: https://developer.mozilla.org/en-US/docs/Web/HTML
+      - command: press-keys
+        keys: [enter]
+      - command: wait
+        timeout: 7000
+      - command: assert
+        expect: MDN Web Docs site has loaded successfully
+      - command: hover-text
+        text: HTML
+        description: A header
+        action: click
+      - command: scroll
+        direction: down
+        amount: 1000
+        method: mouse        
+      - command: scroll-until-text
+        text: Help improve MDN
+        direction: down
+      - command: hover-text
+        text: Use data attributes
+        description: Link in the MDN sidebar that navigates to the 'Use data attributes' documentation page
+        action: click
+      - command: assert
+        expect: The 'Use data attributes' page is selected in the sidebar and the main title matches the page content
+      - command: hover-text
+        text: HTML syntax
+        description: A header
+        action: click
+      - command: scroll
+        direction: down
+        amount: 1000
+        method: mouse        
+      - command: scroll-until-text
+        text: Help improve MDN
+        direction: down     
+      - command: hover-text
+        text: Add a hitmap on top of an image
+        description: Link in the MDN sidebar that navigates to the 'Add a hitmap on top of an image' documentation page
+        action: click
+      - command: assert
+        expect: The 'Add a hitmap on top of an image' page is selected in the sidebar and displays the correct content title
+      - command: hover-text
+        text: Image maps, and their drawbacks
+        description: A header
+        action:  click
+      - command: scroll
+        direction: down
+        amount: 1000
+        method: mouse        
+      - command: scroll-until-text
+        text: Help improve MDN
+        direction: down     
+      - command: run
+        file: ../snippets/_focus.yaml
+      - command: if
+        condition: if the text 'Forming memories as you work' still available
+        then:
+          - command: focus-application
+            name: Google Chrome 
+          - command: wait
+            timeout: 4000 
+          - command: assert
+            expect: Google Chrome is currently open and active
+          - command: press-keys
+            keys:
+              - ctrlleft
+              - t 
+          - command: wait
+            timeout: 5000              
+          - command: type
+            text: https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html
+          - command: press-keys
+            keys: [enter]
+          - command: wait
+            timeout: 7000
+          - command: assert
+            expect: Rust official documentation website has loaded successfully
+          - command: hover-text
+            text: Variables and Mutability
+            description: A header.
+            action: click  
+          - command: scroll
+            direction: down
+            amount: 1000
+            method: mouse            
+          - command: scroll-until-text
+            text: "$ cargo run"
+            direction: down     
+          - command: hover-text
+            text: 3.2. Data Types
+            description: Link in the sidebar of the Rust book directing to the 'Data Types' section
+            action: click
+          - command: assert
+            expect: The 'Data Types' page is selected and its content is correctly displayed
+          - command: hover-text
+            text: Data Types
+            description: A header
+            action: click  
+          - command: scroll
+            direction: down
+            amount: 1000
+            method: mouse            
+          - command: scroll-until-text
+            text: thread 'main'
+            direction: down
+          - command: run
+            file: ../snippets/_focus.yaml
+          - command: if
+            condition: if the text 'Forming memories as you work' still available
+            then:
+              - command: focus-application
+                name: Google Chrome 
+              - command: wait
+                timeout: 4000 
+              - command: assert
+                expect: Google Chrome is currently open and active
+              - command: press-keys
+                keys:
+                  - ctrlleft
+                  - t 
+              - command: wait
+                timeout: 5000                   
+              - command: type
+                text: https://modelcontextprotocol.io/introduction
+              - command: press-keys
+                keys: [enter] 
+              - command: wait
+                timeout: 7000
+              - command: assert
+                expect: MCP website has loaded successfully
+              - command: hover-text
+                text: What is the Model Context Protocol (MCP)?
+                description: A header
+                action: click
+              - command: scroll
+                direction: down
+                amount: 1000
+                method: mouse                
+              - command: scroll-until-text
+                text: Learn more
+                direction: down       
+              - command: hover-text
+                text: Architecture
+                description: Link in the sidebar of the MCP docs directing to the 'Architecture' page
+                action: click
+              - command: assert
+                expect: The 'Architecture' page is selected and its content is correctly displayed  
+              - command: hover-text
+                text: Architecture overview
+                description: A header
+                action: click  
+              - command: scroll-until-text
+                text: How This Works in AI Applications
+                direction: down
+                method: mouse
+                distance: 3000                   
+              - command: hover-text
+                text: Servers
+                description: Link in the sidebar of the MCP docs directing to the 'Servers' page
+                action: click
+              - command: assert
+                expect: The 'Servers' page is selected and its content is correctly displayed
+              - command: hover-text
+                text: Understanding MCP servers
+                description: A header
+                action: click
+              - command: scroll
+                direction: down
+                amount: 3000
+                method: mouse                
+              - command: scroll-until-text
+                text: The Complete Flow
+                direction: down             
+              - command: run
+                file: ../snippets/_focus.yaml
+              - command: if
+                condition: if the text 'Forming memories as you work' still available
+                then:
+                  - command: focus-application
+                    name: Google Chrome 
+                  - command: wait
+                    timeout: 4000 
+                  - command: assert
+                    expect: Google Chrome is currently open and active
+                  - command: press-keys
+                    keys:
+                      - ctrlleft
+                      - t 
+                  - command: wait
+                    timeout: 5000                 
+                  - command: type
+                    text: https://docs.pieces.app/products/meet-pieces
+                  - command: press-keys
+                    keys: [enter]  
+                  - command: wait
+                    timeout: 7000
+                  - command: assert
+                    expect: Pieces for developers website has loaded successfully
+                  - command: hover-text
+                    text: Getting to Know Pieces
+                    description: A header
+                    action: click
+                  - command: scroll
+                    direction: down
+                    amount: 1000
+                    method: mouse                    
+                  - command: scroll-until-text
+                    text: How do I Use Pieces?
+                    direction: down                 
+                  - command: hover-text
+                    text: Fundamentals
+                    description: Link in the sidebar of the Pieces for developers docs directing to the 'Core Features of Pieces' page
+                    action: click
+                  - command: assert
+                    expect: The 'Fundamentals' page is selected and its content is correctly displayed  
+                  - command: hover-text
+                    text: Core Features of Pieces
+                    description: A header
+                    action: click  
+                  - command: scroll
+                    direction: down
+                    amount: 1000
+                    method: mouse                    
+                  - command: scroll-until-text
+                    text: Workstream Activity
+                    direction: down                  
+                  - command: hover-text
+                    text: Installation Guide | Windows
+                    description: Link in the sidebar of the Pieces for developers docs directing to the 'Installation Guide | Windows' page
+                    action: click
+                  - command: assert
+                    expect: The 'Installation Guide | Windows' page is selected and its content is correctly displayed
+                  - command: hover-text
+                    text: Installation Guide | Windows
+                    description: A header
+                    action: click
+                  - command: scroll
+                    direction: down
+                    amount: 1000
+                    method: mouse                    
+                  - command: scroll-until-text
+                    text: Updating
+                    direction: down                   
+                  - command: hover-text
+                    text: Overview
+                    description: Link in the sidebar of the Pieces for developers docs directing to the 'Overview' page
+                    action: click
+                  - command: assert
+                    expect: The 'Overview' page is selected and its content is correctly displayed  
+                  - command: hover-text
+                    text: Introduction to Pieces Quick Guides
+                    description: A header
+                    action: click 
+                  - command: scroll
+                    direction: down
+                    amount: 1000
+                    method: mouse                     
+                  - command: scroll-until-text
+                    text: Ready to Explore?
+                    direction: down           
+                  - command: run
+                    file: ../snippets/_focus.yaml
+                  - command: if
+                    condition: if the text 'Forming memories as you work' still available
+                    then:
+                      - command: focus-application
+                        name: Google Chrome 
+                      - command: wait
+                        timeout: 4000 
+                      - command: assert
+                        expect: Google Chrome is currently open and active
+                      - command: press-keys
+                        keys:
+                          - ctrlleft
+                          - t 
+                      - command: wait
+                        timeout: 5000
+                      - command: type
+                        text: https://react.dev/learn
+                      - command: press-keys
+                        keys: [enter]  
+                      - command: wait
+                        timeout: 7000
+                      - command: assert
+                        expect: React website has loaded successfully
+                      - command: scroll
+                        direction: down
+                        amount: 1000
+                        method: mouse                        
+                      - command: scroll-until-text
+                        text: Next Steps
+                        direction: down                      
+                      - command: hover-text
+                        text: Thinking in React
+                        description: Link in the sidebar of the React docs directing to the 'Thinking in React' page
+                        action: click
+                      - command: scroll
+                        direction: down
+                        amount: 1000
+                        method: mouse                        
+                      - command: scroll-until-text                 
+                        text: Where to go from here
+                        direction: down
+                      - command: hover-text
+                        text: Describing the UI
+                        description: Link in the sidebar of the React docs directing to the 'Describing the UI' page
+                        action: click     
+                      - command: scroll
+                        direction: down
+                        amount: 1000
+                        method: mouse                        
+                      - command: scroll-until-text
+                        text: JavaScript in JSX with curly braces
+                        direction: down                               
+                      - command: hover-text
+                        text: Setup
+                        description: Link in the sidebar of the React docs directing to the 'Setup' page
+                        action: click    
+                      - command: scroll
+                        direction: down
+                        amount: 1000
+                        method: mouse            
+                      - command: scroll-until-text
+                        text: Next Steps
+                        direction: down                                                                      
+                      - command: run
+                        file: ../snippets/_focus.yaml
+                      - command: run
+                        file: copilot-onboarding.yaml 
+                    else:
+                      - command: run
+                        file: copilot-onboarding.yaml
+
+            else: 
+              - command: run
+                file: testdriver/copilot_onboarding.yaml
+
+        else: 
+          - command: run
+            file: testdriver/copilot_onboarding.yaml

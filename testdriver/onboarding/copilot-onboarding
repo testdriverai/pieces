@@ -1,0 +1,73 @@
+version: 6.0.11
+steps:
+  - prompt: 
+      Continue following orders to finish the LTM onboarding flow
+    commands: 
+      - command: wait
+        timeout: 10000
+      - command: hover-text
+        text: I'm Ready
+        description: A dark button in the bottom left named 'I'm Ready'
+        action: click
+      - command: wait
+        timeout: 7000 
+      - command: hover-image 
+        description: click on the Source Control button (settings icon with dots) selected with blue shadow, to the right of the 'LTM-2' button
+        action: click       
+
+  - prompt: Open Power Menu via Home Icon (hold Ctrl then click Enter), click Continue, then go to Pieces Copilot and ensure it opens. Click GPT-4.1, then Cloud, press Escape, and select the prompt; 'Generate a stand-up styled summary of my recent work'. Assert that Copilot responds after prompt is sent.
+    commands:
+      - command: press-keys
+        keys:
+          - ctrlleft
+          - enter
+      - command: assert
+        expect: A pop-up menu is displayed  
+      - command: hover-text
+        text: Continue
+        description: A dark button named 'Continue'
+        action: click
+      - command: hover-text
+        text: Pieces Copilot
+        description: click on the text 'Pieces Copilot' in the horizontal menu bar    
+        action: click
+      - command: wait
+        timeout: 5000  
+      - command: assert
+        expect: A text 'New chat' is displayed
+      - command: hover-text
+        text: GPT-4.1
+        description: A button in the bottom left that has 'OpenAI/Chatgpt' logo named 'GPT-4.1'
+        action: click
+      - command: wait
+        timeout: 5000  
+      - command: hover-text
+        text: Cloud
+        description: a button named 'Cloud' to access Cloud LLMs
+        action: click
+      - command: wait
+        timeout: 5000          
+      - command: press-keys
+        keys: [escape]
+      - command: hover-text
+        text: Generate a stand-up styled summary of my recent work.
+        description: A suggested prompt
+        action: click
+      - command: wait
+        timeout: 75000  
+      - command: assert
+        expect: Copilot Responds to the message sent
+      - command: press-keys
+        keys:
+          - ctrlleft
+          - enter
+      - command: assert
+        expect: A pop-up menu is displayed 
+      - command: hover-text
+        text: Pieces Drive
+        description: click on the text 'Pieces Drive' in the horizontal menu bar    
+        action: click
+      - command: wait
+        timeout: 5000  
+      - command: assert
+        expect: A text 'Saved Materials' is displayed

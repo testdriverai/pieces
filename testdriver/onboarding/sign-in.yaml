@@ -1,0 +1,52 @@
+version: 6.0.11
+steps:
+  - prompt: sign into the Pieces for Developers application
+    commands:
+      - command: wait-for-text
+        text: Sign in
+        timeout: 400000
+      - command: match-image
+        path: ../screenshots/windows/sign-in_button.png
+        action: click
+      - command: wait
+        timeout: 2000
+      - command: hover-text
+        text: Start without your data
+        description: A button to proceeding MS Edge setup
+        action: click
+      - command: hover-text
+        text: Confirm and continue    
+        description: A button to proceeding MS Edge setup
+        action: click
+      - command: hover-text
+        text: Continue without Google data
+        description: A button to proceeding MS Edge setup
+        action: click
+      - command: hover-text
+        text: Confirm and start browsing
+        description: A button to proceeding MS Edge setup  
+        action: click
+      - command: hover-text
+        text: Email
+        description: a placeholder that contains the word "Email"
+        action: click  
+      - command: type    
+        text: xedowa8138@memeazon.com
+      - command: hover-text
+        text: Continue
+        description: a button to proceed in sign-in
+        action: click  
+      - command: hover-text
+        text: Password
+        description: a placeholder that contains the word "Password"
+        action: click  
+      - command: type
+        text: aqEr6T7chC8QJB!
+      - command: hover-text
+        text: Continue
+        description: a button to proceed in sign-in
+        action: click    
+      - command: wait
+        timeout: 10000
+      - command: run
+        file: ../snippets/_focus.yaml

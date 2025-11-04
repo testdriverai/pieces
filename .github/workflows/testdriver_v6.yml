@@ -1,23 +1,26 @@
-name: TestDriver v6
+name: TestDriver - Installation Tests
 
 on:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   test-workflow:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         test_file:
-          - testdriver/_focus.yaml
-          - testdriver/install_pos/install_pos_exe.yaml
+          - testdriver/onboarding/onboarding.yaml
     steps:
       - name: Checkout the repo to access the test files
         uses: actions/checkout@v4
 
-      - name: Run test
+      - name: Run TestDriverAI
         run: |
-          npx testdriverai@beta run ${{ matrix.test_file }} --sandbox-instance=c5.2xlarge
+          npx testdriverai@latest run ${{ matrix.test_file }} --sandbox-instance=c5.2xlarge
         env:
           FORCE_COLOR: 3
           TD_API_KEY: ${{ secrets.TESTDRIVER_API_KEY }}

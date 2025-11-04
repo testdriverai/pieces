@@ -1,0 +1,95 @@
+version: 6.0.11
+session: 67f00511acbd9ccac373edf7
+steps:
+  - prompt: Initialize Existing User DB
+    commands:
+      - command: exec
+        lang: pwsh
+        timeout: 300000
+        code: |
+            # Re-define variables for this command block
+            $prodDataUrl = "https://github.com/testdriverai/assets-pieces/archive/refs/heads/main.zip"
+            $prodDataZipPath = "$env:USERPROFILE\Downloads\assets-pieces-main.zip"
+            $prodDataExtractedPath = "$env:USERPROFILE\AppData\Local\Mesh Intelligent Technologies, Inc\Pieces OS\com.pieces.os"
+            
+            # Stop pfd and pos before replacing
+            Stop-Process -Name "pieces_for_x" -Force
+            Stop-Process -Name "os_server" -Force
+
+            # Download and setup production data
+            Start-Sleep -Seconds 2
+            
+            try {
+              Write-Host "$(Get-Date -Format G): Downloading Production Data..."
+              Invoke-WebRequest -Uri $prodDataUrl -OutFile $prodDataZipPath -ErrorAction Stop
+              
+              $prodDataPath = "$prodDataExtractedPath\production"
+              # Delete the existing production folder
+              try {
+                Write-Host "$(Get-Date -Format G): Deleting existing production folder..."
+                if (Test-Path $prodDataPath) {
+                    Remove-Item -Recurse -Force $prodDataPath
+                }
+              } catch {
+                Write-Host "$(Get-Date -Format G): Failed to delete the existing production folder."
+              }
+
+              # Extract the repo zip
+              Expand-Archive -Path $prodDataZipPath -DestinationPath $env:USERPROFILE\Downloads -Force
+
+              # Path to extracted repo
+              $repoExtractedPath = Join-Path $env:USERPROFILE "Downloads\assets-pieces-main"
+
+              # Copy only the production-onboarding folder into com.pieces.os\production
+              $sourceFolder = Join-Path $repoExtractedPath "production-onboarding"
+              $targetFolder = Join-Path $prodDataExtractedPath "production"
+
+              if (Test-Path $sourceFolder) {
+                  Copy-Item -Path $sourceFolder -Destination $targetFolder -Recurse -Force
+                  Write-Host "Copied production-onboarding to $targetFolder"
+              } else {
+                  Write-Host "Source folder not found: $sourceFolder"
+              }
+
+              # Clean up extracted repo + zip
+              Remove-Item $prodDataZipPath -Force
+              Remove-Item $repoExtractedPath -Recurse -Force
+            } catch {
+              Write-Host "$(Get-Date -Format G): Failed to download Production Data."
+            }
+
+      - command: exec
+        lang: pwsh
+        timeout: 300000
+        code: |
+            # Start Pieces OS Server
+            Write-Host "$(Get-Date -Format G): Attempting to start the Pieces OS Server..."
+            $osServerExePath = "C:\Program Files\Pieces OS\os_server.exe"
+
+            if (Test-Path $osServerExePath) {
+              Start-Process -FilePath $osServerExePath -ArgumentList '/SILENT'
+              Write-Host "$(Get-Date -Format G): Pieces OS Server started successfully."
+            } else {
+              Write-Host "$(Get-Date -Format G): Failed to find the Pieces OS Server executable."
+            }
+
+      - command: exec
+        lang: pwsh
+        timeout: 300000
+        code: |
+            # Start Pieces Desktop Application
+            Start-Sleep -Seconds 5
+            
+            Write-Host "$(Get-Date -Format G): Attempting to start the Pieces application..."
+            $piecesExePath = "C:\Program Files\Pieces for Developers\pieces_for_x.exe"
+
+            if (Test-Path $piecesExePath) {
+              Start-Process -FilePath $piecesExePath
+              Write-Host "$(Get-Date -Format G): Pieces application started successfully."
+            } else {
+              Write-Host "$(Get-Date -Format G): Failed to find the Pieces application executable."
+            }
+
+      - command: wait-for-text
+        text: Pieces
+        timeout: 10000

@@ -1,7 +1,7 @@
 version: 6.0.11
 session: 67f00511acbd9ccac373edf7
 steps:
-  - prompt: Install Desktop App
+  - prompt: install pfd
     commands:
       - command: exec
         lang: pwsh
